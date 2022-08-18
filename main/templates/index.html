@@ -5,14 +5,119 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <title>Document</title>
 </head>
 
-<body>
-    <form action="{{MAIN_URL}}uploader" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file[]" multiple/>
+<body onload="init()">
+    <form action="{{MAIN_URL}}uploader" method="POST" enctype="multipart/form-data" id="fileform">
+        <input id="file" type="file" name="file[]" multiple accept=".txt"/>
         <input type="submit" />
     </form>
+
+    <button id="getresult">Get Result</button>
+    
+    <div id="topbow" ></div>
+    <div id="topTFIDF"></div>
+  <!-- <p id="fileContent" fontsize="14"></p> -->
+    <div id="fileContent">
+        
+    </div>
+    
 </body>
+
+<script>
+    var articles = []
+
+    function init() {
+        document.getElementById('file').addEventListener('change', handleFileSelect, false);
+    }
+
+    function handleFileSelect(event) {
+        clearTop5Result()
+        let element = document.getElementById('fileContent')
+        element.innerHTML = '';
+
+        for (let i = 0;i<event.target.files.length;i++){
+            reader = new FileReader()
+            reader.onload = handleFileLoad;
+            reader.readAsText(event.target.files[i])
+        }
+
+    }
+
+    function handleFileLoad(event) {
+        //console.log(event);
+        let contentfill = document.getElementById('fileContent')
+        // contentfill =  contentfill.textContent+= event.target.result + "<br>"
+        var tag = document.createElement("p");
+        var text = document.createTextNode(event.target.result);
+        articles.push(event.target.result)
+        tag.appendChild(text);
+        contentfill.appendChild(tag);
+        //document.getElementById('fileContent').textContent = event.target.result;
+    }
+
+    $('#getresult').click(function(){
+        clearTop5Result()
+        var form_data = new FormData();
+        var ins = document.getElementById('file').files.length;
+
+        if(ins == 0){
+
+        }
+
+        for(let x = 0;x<ins;x++){
+            form_data.append("file[]",document.getElementById('file').files[x]);
+
+        }
+
+        $.ajax({
+            url:'test',
+            dataType:'json',
+            cache:false,
+            contentType:false,
+            processData:false,
+            data:form_data,
+            type:'post',
+            success: function(response){
+                let tag1 = document.createElement("h3");
+                let tag2 = document.createElement("h3");
+                let text1 = document.createTextNode('TOP 5 OF BACK OF WORD');
+                let text2 = document.createTextNode('TOP 5 OF TF-IDF');
+                tag1.appendChild(text1);
+                tag2.appendChild(text2);
+                
+                document.getElementById('topbow').appendChild(tag1)
+                document.getElementById('topTFIDF').appendChild(tag2)
+
+                let topBOW = response['topBOW']
+                let topTFIDF = response['topTFIDF']
+
+                for(let i=0;i<topBOW.length;i++){
+                    let tag = document.createElement("p");
+                    let text = document.createTextNode(topBOW[i]);
+                    tag.appendChild(text);
+                    document.getElementById('topbow').appendChild(tag)
+                }
+                for(let i=0;i<topTFIDF.length;i++){
+                    let tag = document.createElement("p");
+                    let text = document.createTextNode(topTFIDF[i]);
+                    tag.appendChild(text);
+                    document.getElementById('topTFIDF').appendChild(tag)
+                }
+
+
+            }
+        })
+
+    })
+
+    function clearTop5Result(){
+        document.getElementById('topbow').innerHTML = ''
+        document.getElementById('topTFIDF').innerHTML = ''
+    }
+
+</script>
 
 </html>

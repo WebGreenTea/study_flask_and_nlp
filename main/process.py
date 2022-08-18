@@ -67,7 +67,9 @@ class NLTKprocess:
 
         #tfidf_weights = tfidf[doc]
         #print(tfidf_weights[:5])
-        print(tfidf_weights)
+        
+        
+        #print(tfidf_weights)
 
         topTFIDF = []
         sorted_tfidf_weights = sorted(tfidf_weights, key=lambda w: w[1], reverse=True)

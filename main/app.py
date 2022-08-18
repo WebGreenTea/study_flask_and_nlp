@@ -1,4 +1,5 @@
-from flask import Flask,render_template,request,redirect,url_for,flash,session
+from operator import le
+from flask import Flask,render_template,request,redirect,url_for,flash,session,jsonify
 from flask_session import Session
 from werkzeug.utils import secure_filename
 import os
@@ -10,6 +11,9 @@ app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
+
+
 ALLOWED_EXTENSIONS = {'txt'}
 
 
@@ -41,7 +45,6 @@ def upload_file():
         # If the user does not select a file, the browser submits an
         # empty file without a filename.
         
-        tfidf = []
         Raw_articles = []
         for file in files:
             if file.filename == '':
@@ -68,5 +71,43 @@ def upload_file():
         return redirect(url_for('result'))
     return redirect(mainurl.MAIN_URL)
 
+
+@app.route('/test', methods=['POST'])
+def test():
+    if 'file[]' not in request.files:
+        resp = jsonify({'message': 'No file part in the request'})
+        resp.status_code = 400
+        return resp
+    files = request.files.getlist("file[]")
+    Raw_articles = []
+    for file in files:
+        if file.filename == '':
+            resp = jsonify({'message': 'No selected fil'})
+            resp.status_code = 400
+            return resp
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(f"text_files/{filename}"))
+            
+            f = open(f"./text_files/{filename}", "r")
+            Raw_articles.append(f.read())
+            #print(p.preprocessed)
+            #return render_template("result.html",topBOW=topBOW)
+        else:
+            resp = jsonify({'message': 'Invalid file'})
+            resp.status_code = 400
+            return resp
+    process = p(Raw_articles)
+    #session['topBOW'] = process.bow()
+    #session['topTFIDF'] = process.tfidf()
+    return jsonify({'message':'success','topBOW':process.bow(),'topTFIDF':process.tfidf()})
+    # text = request.args.get('data')
+    # print((text))
+    # return jsonify({'testdata':text})
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
