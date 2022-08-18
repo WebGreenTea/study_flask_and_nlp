@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+
+</head>
+<body>
+    <label for="upload">File Upload</label>
+    <input type="file" name="upload" id="upload">
+    <p id="textContent"></p>
+
+    
+    <py-script>
+        import js
+        import asyncio
+        import word_frequency
+        from js import document,FileReader
+        from pyodide import create_proxy
+
+        def readComplete(event):
+            text = document.getElementById("textContent")
+            text.innerText = event.target.result
+
+        def process_file(x):
+            fileList = document.getElementById("upload").files
+
+            for file in fileList:
+                reader = FileReader.new()
+                OnloadEvent = create_proxy(readComplete)
+                reader.onload = OnloadEvent
+                reader.readAsText(file)
+
+
+        def setup():
+            fileEvent = create_proxy(process_file)
+
+            e = document.getElementById("upload")
+            e.addEventListener("change",fileEvent,False)
+
+        setup()
+    </py-script>
+</body>
+</html>
