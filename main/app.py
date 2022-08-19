@@ -31,49 +31,97 @@ def result():
     #return render_template("result.html")    
 
 
-@app.route('/uploader', methods = ['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file[]' not in request.files:
-            #flash('No file part')
-            return redirect(mainurl.MAIN_URL)
+# @app.route('/uploader', methods = ['GET', 'POST'])
+# def upload_file():
+#     if request.method == 'POST':
+#         # check if the post request has the file part
+#         if 'file[]' not in request.files:
+#             #flash('No file part')
+#             return redirect(mainurl.MAIN_URL)
         
-        files = request.files.getlist("file[]")
+#         files = request.files.getlist("file[]")
         
         
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
+#         # If the user does not select a file, the browser submits an
+#         # empty file without a filename.
         
-        Raw_articles = []
-        for file in files:
-            if file.filename == '':
-                #flash('No selected file')
-                return redirect(mainurl.MAIN_URL)
-            if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(f"text_files/{filename}"))
+#         Raw_articles = []
+#         for file in files:
+#             if file.filename == '':
+#                 #flash('No selected file')
+#                 return redirect(mainurl.MAIN_URL)
+#             if file and allowed_file(file.filename):
+#                 filename = secure_filename(file.filename)
+#                 file.save(os.path.join(f"text_files/{filename}"))
                 
-                f = open(f"./text_files/{filename}", "r")
-                Raw_articles.append(f.read())
-                #print(p.preprocessed)
-                #return render_template("result.html",topBOW=topBOW)
-            else:
-                return redirect(mainurl.MAIN_URL)
+#                 f = open(f"./text_files/{filename}", "r")
+#                 Raw_articles.append(f.read())
+#                 #print(p.preprocessed)
+#                 #return render_template("result.html",topBOW=topBOW)
+#             else:
+#                 return redirect(mainurl.MAIN_URL)
         
-        process = p(Raw_articles)
+#         process = p(Raw_articles)
         
-        session['topBOW'] = process.bow()
-        session['topTFIDF'] = process.tfidf()
-        session['Raw_articles'] = Raw_articles
-        #tfidf.append(process.tfidf())
-        #data = json.dumps({"topBOW":topBOW})
-        return redirect(url_for('result'))
-    return redirect(mainurl.MAIN_URL)
+#         session['topBOW'] = process.bow()
+#         session['topTFIDF'] = process.tfidf()
+#         session['Raw_articles'] = Raw_articles
+#         #tfidf.append(process.tfidf())
+#         #data = json.dumps({"topBOW":topBOW})
+#         return redirect(url_for('result'))
+#     return redirect(mainurl.MAIN_URL)
+
+@app.route('/searchword',methods=['POST'])
+def searchword():
+    # print('-------------')
+    # if 'file[]' not in request.files:
+    #     resp = jsonify({'message': 'No file part in the request'})
+    #     resp.status_code = 400
+    #     return resp
+    # files = request.files.getlist("file[]")
+    # Raw_articles = []
+    # for file in files:
+    #     if file.filename == '':
+    #         resp = jsonify({'message': 'No selected fil'})
+    #         resp.status_code = 400
+    #         return resp
+    #     if file and allowed_file(file.filename):
+    #         filename = secure_filename(file.filename)
+    #         file.save(os.path.join(f"text_files/{filename}"))
+            
+    #         f = open(f"./text_files/{filename}", "r")
+    #         Raw_articles.append(f.read())
+    #         #print(p.preprocessed)
+    #         #return render_template("result.html",topBOW=topBOW)
+    #     else:
+    #         resp = jsonify({'message': 'Invalid file'})
+    #         resp.status_code = 400
+    #         return resp
+    # print(Raw_articles)
+    articles=request.json['articles']
+    searchWord=request.json['search']
+    # print(len(articles))
+    #print(articles)
+    process = p(articles)
+    result,count = process.searchWord(searchWord)
+    #print(searchWord)
+
+    return jsonify({'message':'success','searchword':searchWord,'searchresult':result,'count':count})
+    # return jsonify({'message':'success','searchresult':'test'})
+
+    # if request.method == "POST":
+    #     searchWord=request.form['data']
+
+    #     return jsonify({'message':'success','searchresult':})
+    # else:
+    #     resp = jsonify({'message': 'search error'})
+    #     resp.status_code = 400
+    #     return resp
 
 
-@app.route('/test', methods=['POST'])
-def test():
+
+@app.route('/uploader', methods=['POST'])
+def uploader():
     if 'file[]' not in request.files:
         resp = jsonify({'message': 'No file part in the request'})
         resp.status_code = 400

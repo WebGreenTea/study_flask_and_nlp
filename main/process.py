@@ -79,7 +79,43 @@ class NLTKprocess:
         return topTFIDF
         
 
+    def searchWord(self,word):
+        word = str(word).lower().strip()
+        articles = self.preprocessed
+        # print(Counter(articles).most_common(10))
+        #print(articles)
+        dictionary = Dictionary(articles)
+        wordid =  dictionary.token2id.get(word)
+        corpus = [dictionary.doc2bow(a) for a in articles]
+        #print(corpus)
         
+        #print(wordid)
+
+        total_word_count = defaultdict(int)
+        for word_id, word_count in itertools.chain.from_iterable(corpus):
+            total_word_count[word_id] += word_count
+
+        #print(total_word_count)
+
+        count_of_word = 0
+        sorted_word_count = sorted(total_word_count.items(), key=lambda w: w[1],reverse=True)
+        for word_id, word_count in sorted_word_count:
+            if (dictionary.get(word_id) == word):
+                #print('-----------------')
+                count_of_word = word_count
+                
+                #print('-----------------')
+                break
+        #print(wordid)
+        #print(dictionary.get(computer_id))
+        result = dictionary.get(wordid)
+        
+        #print(count_of_word)
+        if result:
+            return result,count_of_word
+        else:
+            return '',0
+            #return f'Couldn\'t find the word {word} in the entire article.'
 
 
 
