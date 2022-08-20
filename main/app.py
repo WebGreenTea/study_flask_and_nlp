@@ -1,16 +1,16 @@
 from operator import le
 from flask import Flask,render_template,request,redirect,url_for,flash,session,jsonify
-from flask_session import Session
+# from flask_session import Session
 from werkzeug.utils import secure_filename
 import os
-import mainurl
+# import mainurl
 from process import NLTKprocess as p
 import json
 
 app = Flask(__name__)
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+# app.config["SESSION_PERMANENT"] = False
+# app.config["SESSION_TYPE"] = "filesystem"
+# Session(app)
 
 
 
@@ -22,13 +22,13 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/result")
-def result():
-    topBOW = session.get('topBOW')
-    topTFIDF = session.get('topTFIDF')
-    Raw_articles = session.get('Raw_articles')
-    return render_template("result.html",topBOW = topBOW, topTFIDF = topTFIDF,Raw_articles=Raw_articles) 
-    #return render_template("result.html")    
+# @app.route("/result")
+# def result():
+#     topBOW = session.get('topBOW')
+#     topTFIDF = session.get('topTFIDF')
+#     Raw_articles = session.get('Raw_articles')
+#     return render_template("result.html",topBOW = topBOW, topTFIDF = topTFIDF,Raw_articles=Raw_articles) 
+#     #return render_template("result.html")    
 
 
 # @app.route('/uploader', methods = ['GET', 'POST'])
@@ -106,7 +106,7 @@ def searchword():
     result,count = process.searchWord(searchWord)
     #print(searchWord)
 
-    return jsonify({'message':'success','searchword':searchWord,'searchresult':result,'count':count})
+    return jsonify({'message':'success','searchword':str(searchWord).lower().strip(),'searchresult':result,'count':count})
     # return jsonify({'message':'success','searchresult':'test'})
 
     # if request.method == "POST":

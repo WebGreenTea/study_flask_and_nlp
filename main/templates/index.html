@@ -20,13 +20,13 @@
         <form action="#" method="POST" id="searchform" style="display: none;" class="mt-3 mb-3">
             <div class="row">
                 <div class="col-auto">
-                    <input type="text" id="search" placeholder="word to search" name="search" class="form-control">
+                    <input type="text" id="search" placeholder="Word to search" name="search" class="form-control">
                 </div>
                 <div class="col-auto ">
                     <button type="submit" class="btn btn-primary">search</button>
                 </div>
                 <div class="col-auto d-flex align-items-center">
-                    <div class="box" id="searchResult"></div>
+                    <div class="box" ><h5 id="searchResult"></h5></div>
                 </div>
             </div>
         </form>
@@ -54,10 +54,6 @@
             
         </div>
     </div>
-
-    
-
-    
     
 </body>
 
@@ -71,6 +67,7 @@
     function handleFileSelect(event) {
         clearTop5Result()
         clearArticlesArray()
+        clearSearch()
         let element = document.getElementById('fileContent')
         element.innerHTML = '';
         document.getElementById('searchform').style.display = 'none'
@@ -112,8 +109,8 @@
             success: function(response){
                 let tag1 = document.createElement("h3");
                 let tag2 = document.createElement("h3");
-                let text1 = document.createTextNode('TOP 5 OF BACK OF WORD');
-                let text2 = document.createTextNode('TOP 5 OF TF-IDF');
+                let text1 = document.createTextNode('TOP 5 BACK OF WORD');
+                let text2 = document.createTextNode('TOP 5 TF-IDF');
                 tag1.appendChild(text1);
                 tag2.appendChild(text2);
                 
@@ -129,12 +126,20 @@
                     tag.appendChild(text);
                     document.getElementById('topbow').appendChild(tag)
                 }
-                for(let i=0;i<topTFIDF.length;i++){
+                if(topTFIDF.length < 0 ){
+                    for(let i=0;i<topTFIDF.length;i++){
+                        let tag = document.createElement("p");
+                        let text = document.createTextNode(topTFIDF[i]);
+                        tag.appendChild(text);
+                        document.getElementById('topTFIDF').appendChild(tag)
+                    }
+                }else{
                     let tag = document.createElement("p");
-                    let text = document.createTextNode(topTFIDF[i]);
+                    let text = document.createTextNode('Cannot calculate TF-IDF because there is only 1 article');
                     tag.appendChild(text);
                     document.getElementById('topTFIDF').appendChild(tag)
                 }
+                
 
                 // document.getElementById('getresult').style.display = 'none'
                 
@@ -252,11 +257,11 @@
                 let count = response['count']
                 let searchResultarea = document.getElementById('searchResult')
                 if (searchresult == ''){
-                    searchResultarea.innerHTML = 'Couldn\'t find the word \"'+searchword+'\" in the entire article.'
+                    searchResultarea.innerHTML = 'Couldn\'t find the word \"'+searchword+'\" in the bag of words.'
                     //alert('Couldn\'t find the word \"'+searchword+'\" in the entire article.')
                 }else{
-                    searchResultarea.innerHTML = 'Found '+count+ ' \"'+searchword+'\" words in the article.'
-                    //alert('Found the word '+searchword+' in the '+count+' word article.')
+                    searchResultarea.innerHTML = 'Found '+count+ ' \"'+searchresult+'\" words in the bag of word.'
+                    //alert('Found the word '+searchresult+' in the '+count+' word article.')
                 }
                 
             },
@@ -271,6 +276,11 @@
     }
     function clearArticlesArray(){
         articles = []
+    }
+    function clearSearch(){
+        document.getElementById('searchResult').innerHTML = ''
+        document.getElementById('search').value = ''
+
     }
 
 </script>
