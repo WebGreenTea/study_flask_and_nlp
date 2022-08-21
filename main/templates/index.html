@@ -126,7 +126,8 @@
                     tag.appendChild(text);
                     document.getElementById('topbow').appendChild(tag)
                 }
-                if(topTFIDF.length < 0 ){
+                console.log(topTFIDF.length)
+                if(topTFIDF.length > 0 ){
                     for(let i=0;i<topTFIDF.length;i++){
                         let tag = document.createElement("p");
                         let text = document.createTextNode(topTFIDF[i]);
