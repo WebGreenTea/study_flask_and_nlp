@@ -1,5 +1,5 @@
 from operator import le
-from flask import Flask,render_template,request,redirect,url_for,flash,session,jsonify
+from flask import Flask,render_template,request,jsonify
 from werkzeug.utils import secure_filename
 # import mainurl
 from process import NLTKprocess as p

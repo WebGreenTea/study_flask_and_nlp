@@ -31,12 +31,9 @@
             </div>
         </form>
         
-    
         <!-- <div class="d-flex justify-content-center">
             <button class="btn btn-success mb-4" id="getresult" style="display: none;">Top 5 Bag of word and TF-IDF</button>
         </div> -->
-        
-        
         
         <div class="row">
             <div class="col-sm d-flex justify-content-center">
@@ -109,7 +106,7 @@
             success: function(response){
                 let tag1 = document.createElement("h3");
                 let tag2 = document.createElement("h3");
-                let text1 = document.createTextNode('TOP 5 BACK OF WORD');
+                let text1 = document.createTextNode('TOP 5 BAG OF WORD');
                 let text2 = document.createTextNode('TOP 5 TF-IDF');
                 tag1.appendChild(text1);
                 tag2.appendChild(text2);
@@ -140,8 +137,6 @@
                     tag.appendChild(text);
                     document.getElementById('topTFIDF').appendChild(tag)
                 }
-                
-
                 // document.getElementById('getresult').style.display = 'none'
                 
             }
@@ -165,64 +160,6 @@
         //document.getElementById('fileContent').textContent = event.target.result;
     }
 
-    // $('#getresult').click(function(){
-        
-    //     clearTop5Result()
-    //     var form_data = new FormData();
-    //     var ins = document.getElementById('file').files.length;
-        
-    //     if(ins == 0){
-
-    //     }
-
-    //     for(let x = 0;x<ins;x++){
-    //         form_data.append("file[]",document.getElementById('file').files[x]);
-
-    //     }
-        
-
-    //     $.ajax({
-    //         url:'uploader',
-    //         dataType:'json',
-    //         cache:false,
-    //         contentType:false,
-    //         processData:false,
-    //         data:form_data,
-    //         type:'post',
-    //         success: function(response){
-    //             let tag1 = document.createElement("h3");
-    //             let tag2 = document.createElement("h3");
-    //             let text1 = document.createTextNode('TOP 5 OF BACK OF WORD');
-    //             let text2 = document.createTextNode('TOP 5 OF TF-IDF');
-    //             tag1.appendChild(text1);
-    //             tag2.appendChild(text2);
-                
-    //             document.getElementById('topbow').appendChild(tag1)
-    //             document.getElementById('topTFIDF').appendChild(tag2)
-
-    //             let topBOW = response['topBOW']
-    //             let topTFIDF = response['topTFIDF']
-
-    //             for(let i=0;i<topBOW.length;i++){
-    //                 let tag = document.createElement("p");
-    //                 let text = document.createTextNode(topBOW[i]);
-    //                 tag.appendChild(text);
-    //                 document.getElementById('topbow').appendChild(tag)
-    //             }
-    //             for(let i=0;i<topTFIDF.length;i++){
-    //                 let tag = document.createElement("p");
-    //                 let text = document.createTextNode(topTFIDF[i]);
-    //                 tag.appendChild(text);
-    //                 document.getElementById('topTFIDF').appendChild(tag)
-    //             }
-
-    //             document.getElementById('getresult').style.display = 'none'
-    //             //document.getElementById("fileform").reset();
-    //         }
-    //     })
-
-    // })
-
     $('#searchform').submit(function(e){
         e.preventDefault()
         let form_data_search = new FormData();
@@ -232,19 +169,6 @@
         console.log(articles.length)
         
         let searchvalue = document.getElementById('search').value
-        // $.ajax({
-        //     url:'searchword',
-        //     dataType:'json',
-        //     cache:false,
-        //     contentType:false,
-        //     processData:false,
-        //     data:JSON.stringify({articles: articles, search: document.getElementById('search').value}),
-        //     type:'post',
-        //     success: function(response){
-        //         console.log(response['searchresult'])
-        //     }
-        // })
-
         $.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",
