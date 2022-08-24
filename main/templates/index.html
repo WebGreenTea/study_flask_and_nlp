@@ -47,6 +47,9 @@
         </div>
         
       <!-- <p id="fileContent" fontsize="14"></p> -->
+        <div class="mb-3">
+            <button class="btn btn-success" id="entLabel" style="display: none;">Show Entity labels</button>
+        </div>
         <div id="fileContent">
             
         </div>
@@ -68,10 +71,12 @@
         let element = document.getElementById('fileContent')
         element.innerHTML = '';
         document.getElementById('searchform').style.display = 'none'
+        document.getElementById('entLabel').style.display = 'none'
         // document.getElementById('getresult').style.display = 'none'
 
         if(event.target.files.length > 0){
             document.getElementById('searchform').style.display = 'block'
+            document.getElementById('entLabel').style.display = 'block'
             // document.getElementById('getresult').style.display = 'block'
         }
 
@@ -194,7 +199,34 @@
         })
 
     })
+    
+    $('#entLabel').click(function(e){
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "entlabel",
+            dataType: "json",
+            data: JSON.stringify({articles: articles}),
+            success: function(response){
 
+                let htmlList = response['nerList'];
+                let contentfill = document.getElementById('fileContent')
+                contentfill.innerHTML = ''
+                for(let i = 0;i<htmlList.length;i++){
+                    let div = document.createElement('div');
+                    div.innerHTML = htmlList[i].trim();
+                    contentfill.appendChild(div);
+
+                    let hrtag = document.createElement("hr")
+                    hrtag.setAttribute('class','mb-4 mt-4')
+                    console.log(htmlList[i])
+                    contentfill.appendChild(hrtag);
+                }
+            }
+        })
+    })
+
+    
     function clearTop5Result(){
         document.getElementById('topbow').innerHTML = ''
         document.getElementById('topTFIDF').innerHTML = ''

@@ -6,6 +6,8 @@ from gensim.corpora.dictionary import Dictionary
 import itertools
 from collections import defaultdict
 from gensim.models.tfidfmodel import TfidfModel
+import spacy
+from spacy import displacy
 
 class NLTKprocess:
     def __init__(self,textList) -> None:
@@ -119,5 +121,23 @@ class NLTKprocess:
 
 
 
+    def spacyNER(self,textlist):
+        nlp = spacy.load('en_core_web_sm')
+        # entlabelTemp = []
+        # entlabel = []
+        # for text in textlist:
+        #     doc = nlp(text)
+        #     for ent in doc.ents:
+        #         if not(ent.text in entlabelTemp):
+        #             entlabelTemp.append(ent.text)
+        #             #print(ent.label_,ent.text)
+        #             entlabel.append((ent.label_,ent.text))
+        # entlabel.sort(reverse = False, key = lambda t: t[1])
+        # print(entlabel)
 
-
+        NERhteml = []
+        for text in textlist:
+            doc = nlp(text)
+            NERhteml.append(displacy.render(doc, style="ent"))
+        return NERhteml
+            

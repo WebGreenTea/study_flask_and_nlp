@@ -27,7 +27,11 @@ def searchword():
     return jsonify({'message':'success','searchword':str(searchWord).lower().strip(),'searchresult':result,'count':count})
 
 
-
+@app.route('/entlabel',methods=['POST'])
+def entlabel():
+    articles=request.json['articles']
+    process = p(articles)
+    return jsonify({'message':'success','nerList':process.spacyNER(articles)})
 
 @app.route('/uploader', methods=['POST'])
 def uploader():
