@@ -48,7 +48,7 @@
         
       <!-- <p id="fileContent" fontsize="14"></p> -->
         <div class="mb-3">
-            <button class="btn btn-success" id="entLabel" style="display: none;">Show Entity labels</button>
+            <button class="btn btn-info" id="entLabel" style="display: none;">Show Entity labels</button>
         </div>
         <div id="fileContent">
             
@@ -59,6 +59,7 @@
 
 <script>
     var articles = []
+    var entLabelBtnActive = true
 
     function init() {
         document.getElementById('file').addEventListener('change', handleFileSelect, false);
@@ -68,6 +69,7 @@
         clearTop5Result()
         clearArticlesArray()
         clearSearch()
+        resetEntLabelBtn()
         let element = document.getElementById('fileContent')
         element.innerHTML = '';
         document.getElementById('searchform').style.display = 'none'
@@ -201,29 +203,53 @@
     })
     
     $('#entLabel').click(function(e){
-        $.ajax({
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            url: "entlabel",
-            dataType: "json",
-            data: JSON.stringify({articles: articles}),
-            success: function(response){
+        let btnshowent = document.getElementById('entLabel');
+        let contentfill = document.getElementById('fileContent')
+        if(entLabelBtnActive){
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "entlabel",
+                dataType: "json",
+                data: JSON.stringify({articles: articles}),
+                success: function(response){
+                    let htmlList = response['nerList'];
+                    contentfill.innerHTML = ''
+                    for(let i = 0;i<htmlList.length;i++){
+                        let div = document.createElement('div');
+                        div.innerHTML = htmlList[i].trim();
+                        contentfill.appendChild(div);
+                        let hrtag = document.createElement("hr")
+                        hrtag.setAttribute('class','mb-4 mt-4')
+                        console.log(htmlList[i])
+                        contentfill.appendChild(hrtag);
+                    }
+                    btnshowent.setAttribute('class','btn btn-secondary')
+                    btnshowent.innerHTML = 'Hide Entity labels'
+                    entLabelBtnActive = false
 
-                let htmlList = response['nerList'];
-                let contentfill = document.getElementById('fileContent')
-                contentfill.innerHTML = ''
-                for(let i = 0;i<htmlList.length;i++){
-                    let div = document.createElement('div');
-                    div.innerHTML = htmlList[i].trim();
-                    contentfill.appendChild(div);
-
-                    let hrtag = document.createElement("hr")
-                    hrtag.setAttribute('class','mb-4 mt-4')
-                    console.log(htmlList[i])
-                    contentfill.appendChild(hrtag);
                 }
+            })
+        }else{
+            btnshowent.setAttribute('class','btn btn-info')
+            btnshowent.innerHTML = 'Show Entity labels'
+            contentfill.innerHTML = ''
+            
+            for(let i = 0;i<articles.length;i++){
+                console.log(articles[i])
+                let tag = document.createElement("p")
+
+                let text = document.createTextNode(articles[i]);
+                tag.appendChild(text);
+                contentfill.appendChild(tag);
+
+                let hrtag = document.createElement("hr")
+                hrtag.setAttribute('class','mb-4 mt-4')
+                contentfill.appendChild(hrtag);
             }
-        })
+            entLabelBtnActive = true
+        }
+        
     })
 
     
@@ -238,6 +264,12 @@
         document.getElementById('searchResult').innerHTML = ''
         document.getElementById('search').value = ''
 
+    }
+    function resetEntLabelBtn(){
+        let btnshowent = document.getElementById('entLabel');
+        btnshowent.setAttribute('class','btn btn-info')
+        btnshowent.innerHTML = 'Show Entity labels'
+        entLabelBtnActive = true
     }
 
 </script>
