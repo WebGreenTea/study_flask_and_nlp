@@ -8,6 +8,9 @@ from collections import defaultdict
 from gensim.models.tfidfmodel import TfidfModel
 import spacy
 from spacy import displacy
+import pandas as pd
+from transformers import AutoTokenizer,AutoModelForSequenceClassification
+import pathlib
 
 class NLTKprocess:
     def __init__(self,textList) -> None:
@@ -140,4 +143,25 @@ class NLTKprocess:
             doc = nlp(text)
             NERhteml.append(displacy.render(doc, style="ent"))
         return NERhteml
+
+    def predicFakeNews(self,news,convert_to_label=False):
+        model_path = f"{str(pathlib.Path(__file__).parent.resolve().as_posix())}/model/fake-news-bert-base-uncased"
+        model = AutoModelForSequenceClassification.from_pretrained(model_path)
+        tokenizer = AutoTokenizer.from_pretrained(model_path)
+
+        # prepare our text into tokenized sequence
+        inputs = tokenizer(news, padding=True, truncation=True, max_length=512,return_tensors="pt")
+        # perform inference to our model
+        outputs = model(**inputs)
+        # get output probabilities by doing softmax
+        probs = outputs[0].softmax(1)
+        # executing argmax function to get the candidate label
+        d = {
+            0: "reliable",
+            1: "fake"
+        }
+        if convert_to_label:
+            return d[int(probs.argmax())]
+        else:
+            return int(probs.argmax())
             

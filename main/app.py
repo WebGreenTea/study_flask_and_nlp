@@ -33,6 +33,14 @@ def entlabel():
     process = p(articles)
     return jsonify({'message':'success','nerList':process.spacyNER(articles)})
 
+@app.route('/uploadertypetext',methods=['POST'])
+def uploadertypetext():
+    print('test')
+    Raw_articles = [request.json['text']]
+    process = p(Raw_articles)
+    return jsonify({'message':'success','topBOW':process.bow(),'topTFIDF':process.tfidf()})
+
+
 @app.route('/uploader', methods=['POST'])
 def uploader():
     if 'file[]' not in request.files:
@@ -64,6 +72,12 @@ def uploader():
             return resp
     process = p(Raw_articles)
     return jsonify({'message':'success','topBOW':process.bow(),'topTFIDF':process.tfidf()})
+
+@app.route('/fakeNews',methods=['POST'])
+def predicFakeNews():
+    news=request.json['articles'][0]
+    process = p(news)
+    return jsonify({'message':'success','predic': process.predicFakeNews(news,convert_to_label=True)})
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
