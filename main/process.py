@@ -11,6 +11,7 @@ from spacy import displacy
 import pandas as pd
 from transformers import AutoTokenizer,AutoModelForSequenceClassification
 import pathlib
+from textblob import TextBlob
 
 class NLTKprocess:
     def __init__(self,textList) -> None:
@@ -164,4 +165,13 @@ class NLTKprocess:
             return d[int(probs.argmax())]
         else:
             return int(probs.argmax())
-            
+
+    def sentiment(self,text):
+        # Create a textblob object
+        blob = TextBlob(text)
+
+        # Print out its sentiment
+        print(blob.sentiment)
+
+        return blob.sentiment
+                    

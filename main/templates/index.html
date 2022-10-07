@@ -8,6 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
     <title>Document</title>
 </head>
 
@@ -57,6 +58,14 @@
                 </div> -->
             </div>
             
+        </div>
+
+        <div id="sentiment" style="display: none;" class="mt-2">
+            <div class="d-flex aligns-items-center" id="sentimentcontent">
+                <button class="btn-hover color-1" id="sentimentbtn">Sentiment</button>
+                <!-- <div class="spinner-border text-warning ms-2" style="display: none;" id="fakenewspredicloading">    
+                </div> -->
+            </div>
         </div>
         
         
@@ -120,9 +129,11 @@
             clearSearch()
             resetEntLabelBtn()
             clearResultFakenewsPredic()
+            clearResultSentiment()
             document.getElementById('searchform').style.display = 'none'
             document.getElementById('entLabel').style.display = 'none'
             document.getElementById('fakenewpredic').style.display = 'none'
+            document.getElementById('sentiment').style.display = 'none'
             let element = document.getElementById('fileContent')
             element.innerHTML = '';
             document.getElementById("file").value = "";
@@ -140,6 +151,7 @@
             document.getElementById('entLabel').style.display = 'block'
             document.getElementById('searchform').style.display = 'block'
             document.getElementById('fakenewpredic').style.display = 'block'
+            document.getElementById('sentiment').style.display = 'block'
             
             $.ajax({
                 type: "POST",
@@ -199,12 +211,14 @@
         document.getElementById('searchform').style.display = 'none'
         document.getElementById('entLabel').style.display = 'none'
         document.getElementById('fakenewpredic').style.display = 'none'
+        document.getElementById('sentiment').style.display = 'none'
         // document.getElementById('getresult').style.display = 'none'
 
         if(event.target.files.length > 0){
             document.getElementById('searchform').style.display = 'block'
             document.getElementById('entLabel').style.display = 'block'
             document.getElementById('fakenewpredic').style.display = 'block'
+            document.getElementById('sentiment').style.display = 'block'
             // document.getElementById('getresult').style.display = 'block'
         }
 
@@ -365,6 +379,40 @@
         })
     })
 
+    $('#sentimentbtn').click(function (e){
+        clearResultSentiment()
+        let loadingicon = document.createElement("div")
+        loadingicon.classList.add('spinner-border','text-info','ms-2')
+        loadingicon.setAttribute('id','sentimentloading')
+        document.getElementById('sentimentcontent').appendChild(loadingicon)
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "sentiment",
+            dataType: "json",
+            data: JSON.stringify({articles: articles}),
+            success:function(response){
+                document.getElementById('sentimentloading').remove()
+                let resultEle = document.createElement('h5')
+                resultEle.setAttribute('id','sentimentResult')
+                resultEle.classList.add('ms-3')
+                console.log(response['polarity'])
+                if(response['polarity'] > 0){
+                    resultEle.innerHTML = 'Positive'
+                    resultEle.classList.add('text-success')
+                }else if(response['polarity'] < 0){
+                    resultEle.innerHTML = 'Negative'
+                    resultEle.classList.add('text-danger')
+                }else{
+                    resultEle.innerHTML = 'Neutral'
+                    resultEle.classList.add('text-secondary')
+                }
+                
+                document.getElementById('sentimentcontent').appendChild(resultEle)
+            }
+        })
+    })
+
     $('#entLabel').click(function(e){
         let btnshowent = document.getElementById('entLabel');
         let contentfill = document.getElementById('fileContent')
@@ -399,7 +447,7 @@
             contentfill.innerHTML = ''
             
             for(let i = 0;i<articles.length;i++){
-                console.log(articles[i])
+                //console.log(articles[i])
                 let tag = document.createElement("p")
 
                 let text = document.createTextNode(articles[i]);
@@ -437,6 +485,14 @@
     function clearResultFakenewsPredic(){
         try{
             document.getElementById('fakenewsResult').remove()
+        }catch(err){
+            
+        }
+    }
+
+    function clearResultSentiment(){
+        try{
+            document.getElementById('sentimentResult').remove()
         }catch(err){
             
         }

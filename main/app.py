@@ -1,3 +1,4 @@
+from concurrent.futures import process
 from operator import le
 from flask import Flask,render_template,request,jsonify
 from werkzeug.utils import secure_filename
@@ -35,7 +36,7 @@ def entlabel():
 
 @app.route('/uploadertypetext',methods=['POST'])
 def uploadertypetext():
-    print('test')
+    #print('test')
     Raw_articles = [request.json['text']]
     process = p(Raw_articles)
     return jsonify({'message':'success','topBOW':process.bow(),'topTFIDF':process.tfidf()})
@@ -78,6 +79,13 @@ def predicFakeNews():
     news=request.json['articles'][0]
     process = p(news)
     return jsonify({'message':'success','predic': process.predicFakeNews(news,convert_to_label=True)})
+
+@app.route('/sentiment',methods=['POST'])
+def sentiment():
+    text=request.json['articles'][0]
+    process=p(text)
+    polarity,subjectivity = process.sentiment(text)
+    return jsonify({'message':'success','polarity': polarity,'subjectivity':subjectivity})
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
