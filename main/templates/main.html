@@ -202,7 +202,7 @@
                         p.innerHTML = htmlList[i].trim();
                         contentfield.appendChild(p);
                         let hrtag = document.createElement("hr")
-                        hrtag.setAttribute('class','mb-4 mt-4')
+                        hrtag.setAttribute('class','mb-4 mt-4 fileLine')
                         contentfield.appendChild(hrtag);       
                     }
                 }
@@ -242,7 +242,7 @@
             success: function(response){
                 let htmlList = response['nerList'];
                 NerhtmlList = htmlList//keep to global
-                //setContentfieldNER(htmlList)
+                //setNER(htmlList)
                 loadIcon.style.display = 'none'
                 NerPage.style.display = 'block'
             }
@@ -259,11 +259,57 @@
             })
         }
         console.log(nerCheckList)
-
-        
-        
+        setContentfieldNER()    
     }
+    function setContentfieldNER(){
+        contentfield.innerHTML = ''
+        for(let i = 0;i<NerhtmlList.length;i++){
+            //add file name
+            let PTitleTag = document.createElement("p");
+            let fileStr = ''
+            if(filenames.length != 0){
+                fileStr = 'file: '+filenames[i]
+            }
+            PTitleTag.appendChild(document.createTextNode(fileStr))
+            PTitleTag.setAttribute('class','fw-bold fs-5 filename')
+            contentfield.appendChild(PTitleTag)
 
+            let div = document.createElement('div');
+            div.innerHTML = NerhtmlList[i].trim();
+           
+            let entities = div.firstChild
+            for(let j = 0;j<entities.childNodes.length;j++){
+                if(entities.childNodes[j].className == 'entity'){
+                    let entLabel = entities.childNodes[j].childNodes[1].innerText
+                    if(!(nerCheckList.includes(entLabel))){
+                        let data = entities.childNodes[j].childNodes[0]
+                        entities.replaceChild(data,entities.childNodes[j])
+                    }
+                }
+            }
+            contentfield.appendChild(div);
+            let hrtag = document.createElement("hr")
+            hrtag.setAttribute('class','mb-4 mt-4')
+            contentfield.appendChild(hrtag);
+        }
+    }
+    function clearNercheckList(){
+        document.getElementById('person').checked = false
+        document.getElementById('norp').checked = false
+        document.getElementById('org').checked = false
+        document.getElementById('gpe').checked = false
+        document.getElementById('loc').checked = false
+        document.getElementById('product').checked = false
+        document.getElementById('event').checked = false
+        document.getElementById('workofart').checked = false
+        document.getElementById('language').checked = false
+        document.getElementById('date').checked = false
+        document.getElementById('percent').checked = false
+        document.getElementById('money').checked = false
+        document.getElementById('quantity').checked = false
+        document.getElementById('ordinal').checked = false
+        document.getElementById('cardinal').checked = false
+    }
 
     function clearFeture(){
         //clear search
@@ -272,8 +318,13 @@
         document.getElementById('search').value = '';
         document.getElementById('searchResult').innerHTML = '';
 
+        //clear NER
         NerPage.style.display = 'none'
         btnNER.removeAttribute('disabled');
+        nerCheckList = []
+        clearNercheckList()
+
+
         btnSentiment.removeAttribute('disabled');
         btnFakeNews.removeAttribute('disabled');
 
@@ -293,19 +344,19 @@
                 fileStr = 'file: '+filenames[i]
             }
             PTitleTag.appendChild(document.createTextNode(fileStr))
-            PTitleTag.setAttribute('class','fw-bold fs-5 text-white-50')
+            PTitleTag.setAttribute('class','fw-bold fs-5 filename')
             contentfield.appendChild(PTitleTag)
 
             //add file content
             let Ptag = document.createElement("p");
-            Ptag.setAttribute('style','white-space: pre-line')
+            Ptag.setAttribute('style','white-space: pre-line; line-height: 2.5; direction: ltr')
             let article = articles[i]
             Ptag.appendChild(document.createTextNode(article));
             contentfield.appendChild(Ptag);
 
             //add line
             let hrtag = document.createElement("hr")
-            hrtag.setAttribute('class','mb-4 mt-4')
+            hrtag.setAttribute('class','mb-4 mt-4 fileLine')
             contentfield.appendChild(hrtag);
             
         }
@@ -314,28 +365,7 @@
         pageName.innerHTML = name
     }
 
-    function setContentfieldNER(htmlList){
-        contentfield.innerHTML = ''
-        for(let i = 0;i<htmlList.length;i++){
-            //add file name
-            let PTitleTag = document.createElement("p");
-            let fileStr = ''
-            if(filenames.length != 0){
-                fileStr = 'file: '+filenames[i]
-            }
-            PTitleTag.appendChild(document.createTextNode(fileStr))
-            PTitleTag.setAttribute('class','fw-bold fs-5 text-white-50')
-            contentfield.appendChild(PTitleTag)
-
-            let div = document.createElement('div');
-            div.innerHTML = htmlList[i].trim();
-            contentfield.appendChild(div);
-            let hrtag = document.createElement("hr")
-            hrtag.setAttribute('class','mb-4 mt-4')
-            //console.log(htmlList[i])
-            contentfield.appendChild(hrtag);
-        }
-    }
+    
     
 </script>
 </html>

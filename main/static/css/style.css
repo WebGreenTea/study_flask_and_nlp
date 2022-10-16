@@ -372,3 +372,10 @@ hr {
     font-size: 15px;
     border-radius: 10px 10px 10px 10px; 
 }
+
+hr.fileLine{
+    border-top: 3px solid #aaaaaa;
+}
+.filename{
+    color: #00becc;
+}
