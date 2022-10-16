@@ -111,9 +111,8 @@
 <script type="text/javascript">
     //get data
     var data = {{data|tojson}}
-    console.log(data)
+    //console.log(data)
     var articles = data.articles
-    console.log(articles[0])
     var filenames = data.filenames
     data = ''
 
@@ -163,7 +162,7 @@
                 dataType: "json",
                 data: JSON.stringify({articles: articles, search: searchword}),
                 success: function (response) {
-                    console.log(response)
+                    //console.log(response)
                     let searchresult = response['searchresult']
                     let count_Raw = response['count_Raw']
                     let count_Bag = response['count_Bag']
@@ -258,7 +257,7 @@
                 return str != value
             })
         }
-        console.log(nerCheckList)
+        //console.log(nerCheckList)
         setContentfieldNER()    
     }
     function setContentfieldNER(){
