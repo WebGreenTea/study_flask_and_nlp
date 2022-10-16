@@ -1,504 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='js/jquery.redirect.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
     <title>Document</title>
 </head>
-
 <body onload="init()">
-    <div class="container mt-5">
-        <div class="border border-primary p-3 rounded">
-            <div class="btn-group mb-3" role="group" >
-                <input type="radio" class="btn-check" id="input1" name="inputtype" value="1" checked onchange="handleInputTypeChange(this)">
-                <label for="input1" class="btn btn-outline-primary">Upload text file</label>
-                <input type="radio" class="btn-check" id="input2" name="inputtype" value="2" onchange="handleInputTypeChange(this)">
-                <label for="input2" class="btn btn-outline-primary">Type text</label>
-            </div>
-
-            <form action="{{MAIN_URL}}uploader" method="POST" enctype="multipart/form-data" id="fileform">
-                <input class="form-control form-control-lg" id="file" type="file" name="file[]" multiple accept=".txt"/>
-                <!-- <input type="submit" /> -->
-            </form>
-            <form style="display: none;" id="typeform" onsubmit="event.preventDefault();">
-                <div class="form-group">
-                    <textarea class="form-control" id="textareainput" rows="5" placeholder="Type your text"></textarea>
-                    <div class="d-flex justify-content-center mt-2">
-                        <button class="btn btn-success" onclick="hadleTextInput()">OK</button>
+    <nav class="navbar navbar-expand-lg ">
+        <div class="container">
+            <a class="navbar-brand text-light" href="/">Home</a>
+        </div>
+    </nav>
+    <div class="container jumbotron d-flex align-items-center min-vh-100">
+        
+          
+            <div class="w-100 mb-50">
+                <div class="text-center mb-4">
+                    <h1>Input your text</h1>
+                </div>
+                <div class="border border-primary p-4 rounded">
+                    <div class="btn-group mb-3" role="group" >
+                        <input type="radio" class="btn-check" id="input1" name="inputtype" value="1" checked onchange="handleInputTypeChange(this)">
+                        <label for="input1" class="btn btn-outline-primary">Upload text file</label>
+                        <input type="radio" class="btn-check" id="input2" name="inputtype" value="2" onchange="handleInputTypeChange(this)">
+                        <label for="input2" class="btn btn-outline-primary">Type text</label>
                     </div>
-                    
-                </div>
-            </form>
-        </div>
-
-        <form action="#" method="POST" id="searchform" style="display: none;" class="mt-3 mb-3">
-            <div class="row">
-                <div class="col-auto">
-                    <input type="text" id="search" placeholder="Word to search" name="search" class="form-control">
-                </div>
-                <div class="col-auto ">
-                    <button type="submit" class="btn btn-primary">search</button>
-                </div>
-                <div class="col-auto d-flex align-items-center">
-                    <div class="box" ><h5 id="searchResult"></h5></div>
-                </div>
-            </div>
-        </form>
-
-        <div id="fakenewpredic"  style="display: none;">
-            <div class="d-flex aligns-items-center" id="fakenewsprediccontent">
-                <button class="btn btn-warning" id="fakenewsbtn">Fake news prediction</button>
-                <!-- <div class="spinner-border text-warning ms-2" style="display: none;" id="fakenewspredicloading">    
-                </div> -->
-            </div>
-            
-        </div>
-
-        <div id="sentiment" style="display: none;" class="mt-2">
-            <div class="d-flex aligns-items-center" id="sentimentcontent">
-                <button class="btn-hover color-1" id="sentimentbtn">Sentiment</button>
-                <!-- <div class="spinner-border text-warning ms-2" style="display: none;" id="fakenewspredicloading">    
-                </div> -->
-            </div>
-        </div>
-        
-        
-        <!-- <div class="d-flex justify-content-center">
-            <button class="btn btn-success mb-4" id="getresult" style="display: none;">Top 5 Bag of word and TF-IDF</button>
-        </div> -->
-        
-        <div class="row">
-            <div class="col-sm d-flex justify-content-center">
-                <div id="topbow" class="mb-3 mt-2"></div>
-            </div>
-            <div class="col-sm d-flex justify-content-center">
-                <div id="topTFIDF" class="mb-3 mt-2"></div>
-            </div>
-            
-            
-        </div>
-        
-      <!-- <p id="fileContent" fontsize="14"></p> -->
-        <div class="mb-3">
-            <button class="btn btn-info" id="entLabel" style="display: none;">Show Entity labels</button>
-        </div>
-        <div id="fileContent">
-            
-        </div>
-    </div>
     
+                    <form action="{{MAIN_URL}}main" method="POST" enctype="multipart/form-data" id="fileform" onsubmit="event.preventDefault();">
+                        <input class="form-control form-control-lg" id="file" type="file" name="file[]" multiple accept=".txt"/>
+                        <div class="d-flex justify-content-center mt-2">
+                            <button class="btn btn-hover color-12 width180" onclick="submitFileInput()">OK</button>
+                        </div>
+                    </form>
+                    <form action="{{MAIN_URL}}main" method="POST" style="display: none;" id="typeform" onsubmit="event.preventDefault();">
+                        <div class="form-group">
+                            <textarea class="form-control" name="textinput" id="textinput" rows="5" placeholder="Type your text"></textarea>
+                            <div class="d-flex justify-content-center mt-2">
+                                <button class="btn btn-hover color-12 width180" onclick="submitTextArea()">OK</button>
+                            </div>
+                            
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+        
+        
+    </div>
 </body>
-
 <script>
-    var articles = []
-    var entLabelBtnActive = true
-    var inputtype = 1
-
     function init() {
         document.getElementById('file').addEventListener('change', handleFileSelect, false);
     }
 
+
     function handleInputTypeChange(radio){
         let typeform = document.getElementById('typeform')
         let fileform = document.getElementById('fileform')
-        if(inputtype != radio.value){
-            
-        }
         if(radio.value == 1){
+            document.getElementById('textinput').value = '';
             fileform.style.display = 'block'
             typeform.style.display = 'none'
         }else{
+            document.getElementById("file").value = "";
             fileform.style.display = 'none'
             typeform.style.display = 'block'
         }
     }
 
-    function hadleTextInput(){
-        
-        let text = document.getElementById('textareainput').value
-        if(text != ""){
-            articles = []
-            clearTop5Result()
-            clearArticlesArray()
-            clearSearch()
-            resetEntLabelBtn()
-            clearResultFakenewsPredic()
-            clearResultSentiment()
-            document.getElementById('searchform').style.display = 'none'
-            document.getElementById('entLabel').style.display = 'none'
-            document.getElementById('fakenewpredic').style.display = 'none'
-            document.getElementById('sentiment').style.display = 'none'
-            let element = document.getElementById('fileContent')
-            element.innerHTML = '';
-            document.getElementById("file").value = "";
-            //uploadDataAndGetResult(articles)
-            
-            articles.push(text)
-            let contentfill = document.getElementById('fileContent')
-            // contentfill =  contentfill.textContent+= event.target.result + "<br>"
-            var tag = document.createElement("p");
-            tag.appendChild(document.createTextNode(text));
-            contentfill.appendChild(tag);
-            let hrtag = document.createElement("hr")
-            hrtag.setAttribute('class','mb-4 mt-4')
-            contentfill.appendChild(hrtag);
-            document.getElementById('entLabel').style.display = 'block'
-            document.getElementById('searchform').style.display = 'block'
-            document.getElementById('fakenewpredic').style.display = 'block'
-            document.getElementById('sentiment').style.display = 'block'
-            
-            $.ajax({
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                url: "uploadertypetext",
-                dataType: "json",
-                data: JSON.stringify({text: text}),
-                success: function (response) {
-                    let tag1 = document.createElement("h3");
-                    let tag2 = document.createElement("h3");
-                    let text1 = document.createTextNode('TOP 5 BAG OF WORD');
-                    let text2 = document.createTextNode('TOP 5 TF-IDF');
-                    tag1.appendChild(text1);
-                    tag2.appendChild(text2);
-                    
-                    document.getElementById('topbow').appendChild(tag1)
-                    document.getElementById('topTFIDF').appendChild(tag2)
-
-                    let topBOW = response['topBOW']
-                    let topTFIDF = response['topTFIDF']
-
-                    for(let i=0;i<topBOW.length;i++){
-                        let tag = document.createElement("p");
-                        let text = document.createTextNode(topBOW[i]);
-                        tag.appendChild(text);
-                        document.getElementById('topbow').appendChild(tag)
-                    }
-                    console.log(topTFIDF.length)
-                    if(topTFIDF.length > 0 ){
-                        for(let i=0;i<topTFIDF.length;i++){
-                            let tag = document.createElement("p");
-                            let text = document.createTextNode(topTFIDF[i]);
-                            tag.appendChild(text);
-                            document.getElementById('topTFIDF').appendChild(tag)
-                        }
-                    }else{
-                        let tag = document.createElement("p");
-                        let text = document.createTextNode('Cannot calculate TF-IDF because there is only 1 article');
-                        tag.appendChild(text);
-                        document.getElementById('topTFIDF').appendChild(tag)
-                    }
-                },
-                
-            })
-        }
-        
-    }
-
+    var articles = []
+    var filenames = []
     function handleFileSelect(event) {
-        clearTop5Result()
-        clearArticlesArray()
-        clearSearch()
-        resetEntLabelBtn()
-        clearResultFakenewsPredic()
-        clearResultSentiment()
-        let element = document.getElementById('fileContent')
-        element.innerHTML = '';
-        document.getElementById('searchform').style.display = 'none'
-        document.getElementById('entLabel').style.display = 'none'
-        document.getElementById('fakenewpredic').style.display = 'none'
-        document.getElementById('sentiment').style.display = 'none'
-        // document.getElementById('getresult').style.display = 'none'
-
-        if(event.target.files.length > 0){
-            document.getElementById('searchform').style.display = 'block'
-            document.getElementById('entLabel').style.display = 'block'
-            document.getElementById('fakenewpredic').style.display = 'block'
-            document.getElementById('sentiment').style.display = 'block'
-            // document.getElementById('getresult').style.display = 'block'
-        }
-
-        for (let i = 0;i<event.target.files.length;i++){
-            reader = new FileReader()
-            reader.onload = handleFileLoad;
-            reader.readAsText(event.target.files[i])
-        }
-
-        clearTop5Result()
-        var form_data = new FormData();
-        var ins = document.getElementById('file').files.length;
-        
-        if(ins == 0){
-
-        }
-
-        for(let x = 0;x<ins;x++){
-            form_data.append("file[]",document.getElementById('file').files[x]);
-
-        }
-        $.ajax({
-            url:'uploader',
-            dataType:'json',
-            cache:false,
-            contentType:false,
-            processData:false,
-            data:form_data,
-            type:'post',
-            success: function(response){
-                let tag1 = document.createElement("h3");
-                let tag2 = document.createElement("h3");
-                let text1 = document.createTextNode('TOP 5 BAG OF WORD');
-                let text2 = document.createTextNode('TOP 5 TF-IDF');
-                tag1.appendChild(text1);
-                tag2.appendChild(text2);
-                
-                document.getElementById('topbow').appendChild(tag1)
-                document.getElementById('topTFIDF').appendChild(tag2)
-
-                let topBOW = response['topBOW']
-                let topTFIDF = response['topTFIDF']
-
-                for(let i=0;i<topBOW.length;i++){
-                    let tag = document.createElement("p");
-                    let text = document.createTextNode(topBOW[i]);
-                    tag.appendChild(text);
-                    document.getElementById('topbow').appendChild(tag)
-                }
-                console.log(topTFIDF.length)
-                if(topTFIDF.length > 0 ){
-                    for(let i=0;i<topTFIDF.length;i++){
-                        let tag = document.createElement("p");
-                        let text = document.createTextNode(topTFIDF[i]);
-                        tag.appendChild(text);
-                        document.getElementById('topTFIDF').appendChild(tag)
-                    }
-                }else{
-                    let tag = document.createElement("p");
-                    let text = document.createTextNode('Cannot calculate TF-IDF because there is only 1 article');
-                    tag.appendChild(text);
-                    document.getElementById('topTFIDF').appendChild(tag)
-                }
-                // document.getElementById('getresult').style.display = 'none'
-                
-            }
-        })
-
-        
-
-    }
-
-    
-
-    function handleFileLoad(event) {
-        //console.log(event);
-        let contentfill = document.getElementById('fileContent')
-        // contentfill =  contentfill.textContent+= event.target.result + "<br>"
-        var tag = document.createElement("p");
-        var text = document.createTextNode(event.target.result);
-        articles.push(event.target.result)
-        tag.appendChild(text);
-        contentfill.appendChild(tag);
-        let hrtag = document.createElement("hr")
-        hrtag.setAttribute('class','mb-4 mt-4')
-        contentfill.appendChild(hrtag);
-        
-        //document.getElementById('fileContent').textContent = event.target.result;
-    }
-
-    $('#searchform').submit(function(e){
-        e.preventDefault()
-        let form_data_search = new FormData();
-        
-        form_data_search.append("search",document.getElementById('search').value);
-        form_data_search.append("articles",articles);
-        console.log(articles.length)
-        
-        let searchvalue = document.getElementById('search').value
-        $.ajax({
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            url: "searchword",
-            dataType: "json",
-            data: JSON.stringify({articles: articles, search: document.getElementById('search').value}),
-            success: function (response) {
-                //console.log(response['searchresult'])
-                let searchresult = response['searchresult']
-                let searchword = response['searchword']
-                let count = response['count']
-                let searchResultarea = document.getElementById('searchResult')
-                if (searchresult == ''){
-                    searchResultarea.innerHTML = 'Couldn\'t find the word \"'+searchword+'\" in the bag of words.'
-                    //alert('Couldn\'t find the word \"'+searchword+'\" in the entire article.')
-                }else{
-                    searchResultarea.innerHTML = 'Found '+count+ ' \"'+searchresult+'\" words in the bag of word.'
-                    //alert('Found the word '+searchresult+' in the '+count+' word article.')
-                }
-                
-            },
-            
-        })
-
-    })
-   
-    
-    $('#fakenewsbtn').click(function(e){
-        // let loading = document.getElementById('fakenewspredicloading')
-        // loading.style.display = 'block'
-        clearResultFakenewsPredic()
-        let loadingicon = document.createElement("div")
-        loadingicon.classList.add('spinner-border','text-warning','ms-2')
-        loadingicon.setAttribute('id','fakenewsloading')
-        document.getElementById('fakenewsprediccontent').appendChild(loadingicon)
-        $.ajax({
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            url: "fakeNews",
-            dataType: "json",
-            data: JSON.stringify({articles: articles}),
-            success:function(response){
-                // loading.style.display = 'none'
-                document.getElementById('fakenewsloading').remove()
-                let resultEle = document.createElement('h5')
-                resultEle.setAttribute('id','fakenewsResult')
-                resultEle.classList.add('ms-3')
-                if(response['predic'] == 'fake'){
-                    resultEle.innerHTML = 'Fakse news'
-                    resultEle.classList.add('text-danger')
-                }else{
-                    resultEle.innerHTML = 'Real news'
-                    resultEle.classList.add('text-success')
-                }
-                
-                document.getElementById('fakenewsprediccontent').appendChild(resultEle)
-                //alert(response['predic'])
-            }
-        })
-    })
-
-    $('#sentimentbtn').click(function (e){
-        clearResultSentiment()
-        let loadingicon = document.createElement("div")
-        loadingicon.classList.add('spinner-border','text-info','ms-2')
-        loadingicon.setAttribute('id','sentimentloading')
-        document.getElementById('sentimentcontent').appendChild(loadingicon)
-        $.ajax({
-            type: "POST",
-            contentType: "application/json; charset=utf-8",
-            url: "sentiment",
-            dataType: "json",
-            data: JSON.stringify({articles: articles}),
-            success:function(response){
-                document.getElementById('sentimentloading').remove()
-                let resultEle = document.createElement('h5')
-                resultEle.setAttribute('id','sentimentResult')
-                resultEle.classList.add('ms-3')
-                console.log(response['polarity'])
-                if(response['polarity'] > 0){
-                    resultEle.innerHTML = 'Positive'
-                    resultEle.classList.add('text-success')
-                }else if(response['polarity'] < 0){
-                    resultEle.innerHTML = 'Negative'
-                    resultEle.classList.add('text-danger')
-                }else{
-                    resultEle.innerHTML = 'Neutral'
-                    resultEle.classList.add('text-secondary')
-                }
-                
-                document.getElementById('sentimentcontent').appendChild(resultEle)
-            }
-        })
-    })
-
-    $('#entLabel').click(function(e){
-        let btnshowent = document.getElementById('entLabel');
-        let contentfill = document.getElementById('fileContent')
-        if(entLabelBtnActive){
-            $.ajax({
-                type: "POST",
-                contentType: "application/json; charset=utf-8",
-                url: "entlabel",
-                dataType: "json",
-                data: JSON.stringify({articles: articles}),
-                success: function(response){
-                    let htmlList = response['nerList'];
-                    contentfill.innerHTML = ''
-                    for(let i = 0;i<htmlList.length;i++){
-                        let div = document.createElement('div');
-                        div.innerHTML = htmlList[i].trim();
-                        contentfill.appendChild(div);
-                        let hrtag = document.createElement("hr")
-                        hrtag.setAttribute('class','mb-4 mt-4')
-                        //console.log(htmlList[i])
-                        contentfill.appendChild(hrtag);
-                    }
-                    btnshowent.setAttribute('class','btn btn-secondary')
-                    btnshowent.innerHTML = 'Hide Entity labels'
-                    entLabelBtnActive = false
-
-                }
-            })
-        }else{
-            btnshowent.setAttribute('class','btn btn-info')
-            btnshowent.innerHTML = 'Show Entity labels'
-            contentfill.innerHTML = ''
-            
-            for(let i = 0;i<articles.length;i++){
-                //console.log(articles[i])
-                let tag = document.createElement("p")
-
-                let text = document.createTextNode(articles[i]);
-                tag.appendChild(text);
-                contentfill.appendChild(tag);
-
-                let hrtag = document.createElement("hr")
-                hrtag.setAttribute('class','mb-4 mt-4')
-                contentfill.appendChild(hrtag);
-            }
-            entLabelBtnActive = true
-        }
-        
-    })
-
-    
-    function clearTop5Result(){
-        document.getElementById('topbow').innerHTML = ''
-        document.getElementById('topTFIDF').innerHTML = ''
-    }
-    function clearArticlesArray(){
         articles = []
-    }
-    function clearSearch(){
-        document.getElementById('searchResult').innerHTML = ''
-        document.getElementById('search').value = ''
-
-    }
-    function resetEntLabelBtn(){
-        let btnshowent = document.getElementById('entLabel');
-        btnshowent.setAttribute('class','btn btn-info')
-        btnshowent.innerHTML = 'Show Entity labels'
-        entLabelBtnActive = true
-    }
-    function clearResultFakenewsPredic(){
-        try{
-            document.getElementById('fakenewsResult').remove()
-        }catch(err){
-            
+        filenames = []
+        if(event.target.files.length > 0){
+            for (let i = 0;i<event.target.files.length;i++){
+                reader = new FileReader()
+                reader.fileName = event.target.files[i].name
+                reader.onload = function(e){
+                    articles.push(e.target.result)
+                    filenames.push(e.target.fileName)
+                }
+                reader.readAsText(event.target.files[i])
+                
+            }
         }
     }
 
-    function clearResultSentiment(){
-        try{
-            document.getElementById('sentimentResult').remove()
-        }catch(err){
-            
+
+    var url = '{{MAIN_URL}}main'
+    function submitFileInput(){
+        if(articles.length > 0 && filenames.length > 0 && articles.length == filenames.length){
+            let inputTag = '';
+            for(let i = 0;i<filenames.length;i++){
+                inputTag += '<input type="hidden" name="filenames" value="' + filenames[i] + '" />'+
+                '<input type="hidden" name="articles" value="' + articles[i].replaceAll('"','&quot;') + '" />'
+            }
+            let form = $('<form action="' + url + '" method="post">' + inputTag + '</form>');
+            $('body').append(form);
+            document.getElementById("file").value = "";//reset file input
+            console.log(inputTag)
+            form.submit().remove();
         }
+        
+        
     }
 
+    function submitTextArea(){
+        let data = document.getElementById('textinput').value
+        if(data != ''){
+            articles = []
+            filenames = []
+            articles.push(data)
+
+            
+            let form = $('<form action="' + url + '" method="post">'  
+                +'<input type="hidden" name="articles" value="' + articles[0].replaceAll('"','&quot;') + '" />'
+                + '</form>');
+            $('body').append(form);
+
+            document.getElementById('textinput').value = '';//reset textarea
+            document.getElementById("input1").checked = true;
+            let typeform = document.getElementById('typeform')
+            let fileform = document.getElementById('fileform')
+            fileform.style.display = 'block'
+            typeform.style.display = 'none'
+            form.submit().remove();
+        }
+        
+        
+    }
+    
 </script>
-
 </html>

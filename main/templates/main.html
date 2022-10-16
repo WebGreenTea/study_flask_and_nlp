@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
+    <title>Document</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg ">
+        <div class="container">
+            <a class="navbar-brand text-light" href="/">Home</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="mt-5">
+            <div class="text-info">Menu</div>
+            <div class="border-menu p-2 rounded">
+                <button class="btn btn-hover color-13" id="btnSearch" disabled>Search word</button>
+                <button class="btn btn-hover color-14" id="btnNER" >Named-entity recognition</button>
+                <button class="btn btn-hover color-15" id="btnSentiment">Sentiment Analysis</button>
+                <button class="btn btn-hover color-16" id="btnFakeNews">Fake news prediction</button>
+                <button class="btn btn-hover color-17" id="btnBag">Bag of word</button>
+                <button class="btn btn-hover color-18" id="btnTFIDF">TF-IDF</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page Name -->
+    <div class="container">
+        <div class="mt-4 mb-4">
+            <h2 class="fw-bold" id="pageName"></h2>
+        </div>
+    </div>
+    
+    <!-- Loading Icon -->
+    <div class="container " id="loadIcon" style="display: none;">
+        <div class="d-flex justify-content-center mt-5">
+            <div class="spinner-grow me-3 ms-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-grow me-3 ms-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-grow me-3 ms-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <div class="spinner-grow me-3 ms-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- searchPage -->
+    <div class="container mb-3" id="searchPage">
+        <form action="#" method="POST" id="searchform" class="mb-2" onsubmit="event.preventDefault();">
+            <div class="row row-cols-auto g-0">
+                <div class="col">
+                    <input type="text" id="search" placeholder="Word to search" name="search" class="form-control roundLeft ">
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-primary roundRight"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                      </svg></button>
+                </div>
+                <div class="col" style="height: 50px;">
+                    <h5 class="ms-5 " id="searchResult"></h5>
+                    <!-- <div class="box" ><h5 id="searchResult"></h5></div> -->
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- NerPage -->
+    <div class="container mb-5" id="NerPage" style="display: none;">
+        
+        <div class="ps-3">
+            <label for="person" class="btn btn-person" onchange="UpdateNer(this)">PERSON <input type="checkbox" id="person" class="badgebox" value="PERSON"><span class="badge">&check;</span></label>
+            <label for="norp" class="btn btn-norp" onchange="UpdateNer(this)">NORP <input type="checkbox" id="norp" class="badgebox" value="NORP"><span class="badge">&check;</span></label>
+            <label for="org" class="btn btn-org" onchange="UpdateNer(this)">ORG <input type="checkbox" id="org" class="badgebox" value="ORG"><span class="badge">&check;</span></label>
+            <label for="gpe" class="btn btn-gpe" onchange="UpdateNer(this)">GPE <input type="checkbox" id="gpe" class="badgebox" value="GPE"><span class="badge">&check;</span></label>
+            <label for="loc" class="btn btn-loc" onchange="UpdateNer(this)">LOC <input type="checkbox" id="loc" class="badgebox" value="LOC"><span class="badge">&check;</span></label>
+            <label for="product" class="btn btn-product" onchange="UpdateNer(this)">PRODUCT <input type="checkbox" id="product" class="badgebox" value="PRODUCT"><span class="badge">&check;</span></label>
+            <label for="event" class="btn btn-event" onchange="UpdateNer(this)">EVENT <input type="checkbox" id="event" class="badgebox" value="EVENT"><span class="badge">&check;</span></label>
+            <label for="workofart" class="btn btn-workofart" onchange="UpdateNer(this)">WORK OF ART <input type="checkbox" id="workofart" class="badgebox" value="WORK OF ART"><span class="badge">&check;</span></label>
+            <label for="language" class="btn btn-language" onchange="UpdateNer(this)">LANGUAGE <input type="checkbox" id="language" class="badgebox" value="LANGUAGE"><span class="badge">&check;</span></label>
+            <label for="date" class="btn btn-date" onchange="UpdateNer(this)">DATE <input type="checkbox" id="date" class="badgebox" value="DATE"><span class="badge">&check;</span></label>
+            <label for="percent" class="btn btn-percent" onchange="UpdateNer(this)">PERCENT <input type="checkbox" id="percent" class="badgebox" value="PERCENT"><span class="badge">&check;</span></label>
+            <label for="money" class="btn btn-money" onchange="UpdateNer(this)">MONEY <input type="checkbox" id="money" class="badgebox" value="MONEY"><span class="badge">&check;</span></label>
+            <label for="quantity" class="btn btn-quantity" onchange="UpdateNer(this)">QUANTITY<input type="checkbox" id="quantity" class="badgebox" value="QUANTITY"><span class="badge">&check;</span></label>
+            <label for="ordinal" class="btn btn-ordinal" onchange="UpdateNer(this)">ORDINAL<input type="checkbox" id="ordinal" class="badgebox" value="ORDINAL"><span class="badge">&check;</span></label>
+            <label for="cardinal" class="btn btn-cardinal" onchange="UpdateNer(this)">CARDINAL<input type="checkbox" id="cardinal" class="badgebox" value="CARDINAL"><span class="badge">&check;</span></label>
+        </div>
+        
+    </div>
+
+
+
+
+    <div class="container">
+        <div id="fileContent">
+            
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+    //get data
+    var data = {{data|tojson}}
+    console.log(data)
+    var articles = data.articles
+    console.log(articles[0])
+    var filenames = data.filenames
+    data = ''
+
+    //for keep nerHTML
+    var NerhtmlList
+
+    //for keep check ner
+    var nerCheckList = []
+
+    //
+    var pageName = document.getElementById('pageName')
+    var loadIcon = document.getElementById('loadIcon')
+
+    var searchPage = document.getElementById('searchPage')
+    var NerPage = document.getElementById('NerPage')
+
+    var btnSearch = document.getElementById('btnSearch')
+    var btnNER = document.getElementById('btnNER')
+    var btnSentiment = document.getElementById('btnSentiment')
+    var btnFakeNews = document.getElementById('btnFakeNews')
+    var btnBag = document.getElementById('btnBag')
+    var btnTFIDF = document.getElementById('btnTFIDF')
+    
+    
+    
+    
+
+    //add text in text field
+    var contentfield = document.getElementById('fileContent')
+    //resetContentField()
+    setSearchPage()
+
+    //search form
+    $('#searchform').submit(function(e){
+        e.preventDefault()
+        let searchResultarea = document.getElementById('searchResult')
+
+        //sent request to get result
+        let searchword = document.getElementById('search').value
+        if(searchword.trim() != ''){
+            //clear search result
+            searchResultarea.innerHTML = ''
+            $.ajax({
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                url: "searchword",
+                dataType: "json",
+                data: JSON.stringify({articles: articles, search: searchword}),
+                success: function (response) {
+                    console.log(response)
+                    let searchresult = response['searchresult']
+                    let count_Raw = response['count_Raw']
+                    let count_Bag = response['count_Bag']
+                    let htmlList = response['htmlList']
+                    
+                    if(count_Raw <= 0){
+                        searchResultarea.innerHTML += 'Couldn\'t find the word \"'+searchword+'\"in your text'
+                        if(count_Bag <= 0){
+                            searchResultarea.innerHTML += '<br>and couldn\'t find the word \"'+searchword+'\" in the bag of words.'
+                        }else{
+                            searchResultarea.innerHTML += '<br>but found '+count_Bag+ ' \"'+searchresult+'\" words in the bag of word.'
+                        }
+                    }else{
+                        searchResultarea.innerHTML = 'Found '+count_Raw+' \"'+searchword+'\"  word in your text'
+                        if(count_Bag <= 0){
+                            searchResultarea.innerHTML += '<br>but couldn\'t find the word \"'+searchword+'\" in the bag of words.'
+                        }else{
+                            searchResultarea.innerHTML += '<br>and found '+count_Bag+ ' \"'+searchword+'\" words in the bag of word.'
+                        }
+                    }
+                    clearContentField()
+                    for(let i = 0;i<htmlList.length;i++){
+                        //add file name
+                        let PTitleTag = document.createElement("p");
+                        let fileStr = ''
+                        if(filenames.length != 0){
+                            fileStr = 'file: '+filenames[i]
+                        }
+                        PTitleTag.appendChild(document.createTextNode(fileStr))
+                        PTitleTag.setAttribute('class','fw-bold fs-5 text-white-50')
+                        contentfield.appendChild(PTitleTag)
+
+                        //add content
+                        let p = document.createElement('p');
+                        p.setAttribute('style','white-space: pre-line')
+                        p.innerHTML = htmlList[i].trim();
+                        contentfield.appendChild(p);
+                        let hrtag = document.createElement("hr")
+                        hrtag.setAttribute('class','mb-4 mt-4')
+                        contentfield.appendChild(hrtag);       
+                    }
+                }
+            });
+        }
+        
+    })
+ 
+    $('#btnSearch').click(function(e){
+        setSearchPage()
+    })
+    function setSearchPage(){
+        setPageName('Search word')
+        clearContentField()
+        clearFeture()
+        btnSearch.setAttribute("disabled", "");    
+        searchPage.style.display = 'block'
+        resetContentField()
+    }
+    
+    $('#btnNER').click(function(e){
+        setNerPage()
+    });
+    function setNerPage(){
+        loadIcon.style.display = 'block'
+        setPageName('Named-entity recognition')
+        resetContentField()
+        clearFeture()
+        btnNER.setAttribute("disabled", ""); 
+        //NerPage.style.display = 'block'
+        $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "entlabel",
+            dataType: "json",
+            data: JSON.stringify({articles: articles}),
+            success: function(response){
+                let htmlList = response['nerList'];
+                NerhtmlList = htmlList//keep to global
+                //setContentfieldNER(htmlList)
+                loadIcon.style.display = 'none'
+                NerPage.style.display = 'block'
+            }
+        })
+    }
+    function UpdateNer(item){
+        item = item.childNodes[1]
+        let value = item.value
+        if(item.checked){
+            nerCheckList.push(value)
+        }else{//remove from nercheckList
+            nerCheckList = nerCheckList.filter(function(str,index,arr){
+                return str != value
+            })
+        }
+        console.log(nerCheckList)
+
+        
+        
+    }
+
+
+    function clearFeture(){
+        //clear search
+        searchPage.style.display = 'none'
+        btnSearch.removeAttribute('disabled');
+        document.getElementById('search').value = '';
+        document.getElementById('searchResult').innerHTML = '';
+
+        NerPage.style.display = 'none'
+        btnNER.removeAttribute('disabled');
+        btnSentiment.removeAttribute('disabled');
+        btnFakeNews.removeAttribute('disabled');
+
+
+    }
+
+    function clearContentField(){
+        contentfield.innerHTML = ''
+    }
+    function resetContentField(){
+        clearContentField();
+        for(let i = 0;i<articles.length;i++){
+            //add file name
+            let PTitleTag = document.createElement("p");
+            let fileStr = ''
+            if(filenames.length != 0){
+                fileStr = 'file: '+filenames[i]
+            }
+            PTitleTag.appendChild(document.createTextNode(fileStr))
+            PTitleTag.setAttribute('class','fw-bold fs-5 text-white-50')
+            contentfield.appendChild(PTitleTag)
+
+            //add file content
+            let Ptag = document.createElement("p");
+            Ptag.setAttribute('style','white-space: pre-line')
+            let article = articles[i]
+            Ptag.appendChild(document.createTextNode(article));
+            contentfield.appendChild(Ptag);
+
+            //add line
+            let hrtag = document.createElement("hr")
+            hrtag.setAttribute('class','mb-4 mt-4')
+            contentfield.appendChild(hrtag);
+            
+        }
+    }
+    function setPageName(name){
+        pageName.innerHTML = name
+    }
+
+    function setContentfieldNER(htmlList){
+        contentfield.innerHTML = ''
+        for(let i = 0;i<htmlList.length;i++){
+            //add file name
+            let PTitleTag = document.createElement("p");
+            let fileStr = ''
+            if(filenames.length != 0){
+                fileStr = 'file: '+filenames[i]
+            }
+            PTitleTag.appendChild(document.createTextNode(fileStr))
+            PTitleTag.setAttribute('class','fw-bold fs-5 text-white-50')
+            contentfield.appendChild(PTitleTag)
+
+            let div = document.createElement('div');
+            div.innerHTML = htmlList[i].trim();
+            contentfield.appendChild(div);
+            let hrtag = document.createElement("hr")
+            hrtag.setAttribute('class','mb-4 mt-4')
+            //console.log(htmlList[i])
+            contentfield.appendChild(hrtag);
+        }
+    }
+    
+</script>
+</html>

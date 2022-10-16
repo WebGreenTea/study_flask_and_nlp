@@ -12,6 +12,7 @@ import pandas as pd
 from transformers import AutoTokenizer,AutoModelForSequenceClassification
 import pathlib
 from textblob import TextBlob
+import re
 
 class NLTKprocess:
     def __init__(self,textList) -> None:
@@ -107,6 +108,7 @@ class NLTKprocess:
         sorted_word_count = sorted(total_word_count.items(), key=lambda w: w[1],reverse=True)
         for word_id, word_count in sorted_word_count:
             if (dictionary.get(word_id) == word):
+                #print(word_id)
                 #print('-----------------')
                 count_of_word = word_count
                 
@@ -122,6 +124,20 @@ class NLTKprocess:
         else:
             return '',0
             #return f'Couldn\'t find the word {word} in the entire article.'
+
+    def searchWordRaw_HTML(self,articles,searchWord):
+        htmlList = []
+        count = 0
+        searchWord = str(searchWord).lower().strip()
+        for article in articles:
+            match = re.findall(searchWord,article,flags=re.IGNORECASE)
+            count += len(match)
+            match = list(dict.fromkeys(match))
+            for word in match:
+                article = re.sub(word, f'<mark>{word}</mark>', article)
+            htmlList.append(article)
+        return htmlList,count
+
 
 
 

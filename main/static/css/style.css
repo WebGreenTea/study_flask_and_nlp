@@ -1,89 +1,22 @@
 body {
-    background: #141E30;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #243B55, #141E30);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #243B55, #141E30); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #141E30;  
+    background: -webkit-linear-gradient(to right, #243B55, #141E30);  
+    background: linear-gradient(to right, #243B55, #141E30); 
     color: #fff;
 }
 
-.btn-purple-moon {
-    background: #4e54c8;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #8f94fb, #4e54c8);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #8f94fb, #4e54c8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    color: #fff;
-    border: 3px solid #eee;
+nav {
+    background: #393B50
 }
 
-.btn-ultra-voilet {
-    background: #654ea3;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #eaafc8, #654ea3);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #eaafc8, #654ea3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    color: #fff;
-    border: 3px solid #eee;
+.mb-50{
+    margin-bottom: 35rem;
+}
+.border-menu {
+    border: 1px solid #00EDFF;
 }
 
-.btn-pink-moon {
-    background: #ec008c;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #fc6767, #ec008c);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #fc6767, #ec008c); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    color: #fff;
-    border: 3px solid #eee;
-}
 
-.btn-cool-blues {
-    background: #2193b0;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #6dd5ed, #2193b0);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #6dd5ed, #2193b0); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    color: #fff;
-    border: 3px solid #eee;
-}
-
-.btn-dark-blue {
-    background: #7474BF;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #348AC7, #7474BF);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #348AC7, #7474BF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    color: #fff;
-    border: 3px solid #eee;
-}
-
-.btn-green-moon {
-    background: #56ab2f;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #a8e063, #56ab2f);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #a8e063, #56ab2f); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    color: #fff;
-    border: 3px solid #eee;
-}
-
-.btn-orange-moon {
-    background: #fc4a1a;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #f7b733, #fc4a1a);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #f7b733, #fc4a1a); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    color: #fff;
-    border: 3px solid #eee;
-}
-
-.btn-dark-moon {
-    background: #141E30;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #243B55, #141E30);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #243B55, #141E30); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    color: #fff;
-    border: 3px solid #eee;
-}
-
-.btn-light-moon {
-    background: #FFEFBA;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #FFFFFF, #FFEFBA);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #FFFFFF, #FFEFBA); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    color: #000;
-    border: 3px solid #eee;
-}
-
-.btn-funky-moon {
-    background: #A770EF;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(145deg, #FDB99B, #CF8BF3, #A770EF);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(145deg, #FDB99B, #CF8BF3, #A770EF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    color: #fff;
-    border: 3px solid #eee;
-}
 
 .btn-rounded {
     border-radius: 35px;
@@ -111,7 +44,8 @@ hr {
 }
 
 .btn-hover {
-    width: 180px;
+    padding-left: 25px;
+    padding-right: 25px;
     font-size: 16px;
     font-weight: 600;
     color: #fff;
@@ -178,12 +112,263 @@ hr {
     box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.75);
 }
 .btn-hover.color-10 {
-        background-image: linear-gradient(to right, #ed6ea0, #ec8c69, #f7186a , #FBB03B);
+    background-image: linear-gradient(to right, #ed6ea0, #ec8c69, #f7186a , #FBB03B);
     box-shadow: 0 4px 15px 0 rgba(236, 116, 149, 0.75);
 }
 .btn-hover.color-11 {
-       background-image: linear-gradient(to right, #eb3941, #f15e64, #e14e53, #e2373f);  box-shadow: 0 5px 15px rgba(242, 97, 103, .4);
+    background-image: linear-gradient(to right, #eb3941, #f15e64, #e14e53, #e2373f);  
+    box-shadow: 0 5px 15px rgba(242, 97, 103, .4);
+}
+.btn-hover.color-12 {
+    background-image: linear-gradient(to right, #C3FF48, #40e495, #30dd8a, #00FF80);
+    box-shadow: 0 4px 15px 0 rgba(49, 196, 190, 0.75);
+    font-size: 20px;
+    color: #636363;
+    font-weight: bold;
+}
+.btn-hover.color-13 {
+    padding: auto;
+    background-image: linear-gradient(to right, #A87DD2, #4879c4,#8457be,#9e75b1);
+    box-shadow: 0 4px 15px 0 rgba(130, 84, 182, 0.75);
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.width180{
+    width: 180px;
+}
+.btn-hover.color-14 {
+    background-image: linear-gradient(to right, #14cfc9, #00B9FF,#53cbf7,#1fa8a4);
+    box-shadow: 0 4px 15px 0 rgba(0, 140, 165, 0.75);
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.btn-hover.color-15 {
+    background-image: linear-gradient(to right, #FFA561, #FF6ACD,#d83aa3,#e97924);
+    box-shadow: 0 4px 15px 0 rgba(153, 80, 149, 0.75);
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.btn-hover.color-16 {
+    background-image: linear-gradient(to right, #ff854d, #FFAA00,#ee9117,#ffb95e);
+    box-shadow: 0 4px 15px 0 rgba(167, 112, 11, 0.75);
+    font-size: 20px;
+    font-weight: bold; 
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.btn-hover.color-17 {
+    background-image: linear-gradient(to right, #dc9fec, #b030df,#b91ef1,#cb64e7);
+    box-shadow: 0 4px 15px 0 rgba(90, 0, 126, 0.75);
+    font-size: 20px;
+    font-weight: bold; 
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.btn-hover.color-18 {
+    background-image: linear-gradient(to right, #76ee9a, #37a72b,#42be34,#79c071);
+    box-shadow: 0 4px 15px 0 rgba(0, 95, 24, 0.75);
+    font-size: 20px;
+    font-weight: bold; 
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.roundLeft{
+    border-radius: 10px 0px 0px 10px; 
+}
+.roundRight{
+    border-radius: 0px 10px 10px 0px; 
 }
 
 
 
+.badgebox
+{
+    opacity: 0;
+    
+}
+
+.badgebox + .badge
+{
+    /* Move the check mark away when unchecked */
+    text-indent: -999999px;
+    /* Makes the badge's width stay the same checked and unchecked */
+	width: 27px;
+    
+    background-color: #FFFFFF;
+    
+}
+
+.badgebox:focus + .badge
+{
+    /* Set something to make the badge looks focused */
+    /* This really depends on the application, in my case it was: */
+    
+    /* Adding a light border */
+    box-shadow: inset 0px 0px 5px;
+    /* Taking the difference out of the padding */
+    
+}
+
+.badgebox:checked + .badge
+{
+    /* Move the check mark back when checked */
+	text-indent: 0;
+    color: #161616;
+
+}
+
+.btn-person, .btn-person:hover{
+    background-color: #AA9CFC;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+    border-radius: 10px 10px 10px 10px; 
+}
+.btn-norp, .btn-norp:hover{
+    background-color: #C887FB;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+    border-radius: 10px 10px 10px 10px; 
+}
+.btn-org, .btn-org:hover{
+    background-color: #7AECEC;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+    border-radius: 10px 10px 10px 10px; 
+}
+.btn-gpe, .btn-gpe:hover{
+    background-color: #FECA74;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+    border-radius: 10px 10px 10px 10px; 
+}
+.btn-loc, .btn-loc:hover{
+    background-color: #FF9561;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+    border-radius: 10px 10px 10px 10px; 
+}
+.btn-product, .btn-product:hover{
+    background-color: #BFEEB7;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+    border-radius: 10px 10px 10px 10px; 
+}
+.btn-event, .btn-event:hover{
+    background-color: #BFBFBF;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+    border-radius: 10px 10px 10px 10px; 
+}
+.btn-workofart, .btn-workofart:hover{
+    background-color: #BFBFBF;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+    border-radius: 10px 10px 10px 10px; 
+}
+.btn-language, .btn-language:hover{
+    background-color: #BFBFBF;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+    border-radius: 10px 10px 10px 10px; 
+}
+.btn-date, .btn-date:hover{
+    background-color: #BFE1D9;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+    border-radius: 10px 10px 10px 10px; 
+}
+
+.btn-percent, .btn-percent:hover{
+    background-color: #E4E7D2;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+    border-radius: 10px 10px 10px 10px; 
+}
+.btn-money, .btn-money:hover{
+    background-color: #E4E7D2;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+    border-radius: 10px 10px 10px 10px; 
+}
+.btn-quantity, .btn-quantity:hover{
+    background-color: #E4E7D2;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+    border-radius: 10px 10px 10px 10px; 
+}
+.btn-ordinal, .btn-ordinal:hover{
+    background-color: #E4E7D2;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+    border-radius: 10px 10px 10px 10px; 
+}
+.btn-cardinal, .btn-cardinal:hover{
+    background-color: #E4E7D2;
+    font-weight: bold;
+    color: #000000;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    font-size: 15px;
+    border-radius: 10px 10px 10px 10px; 
+}
