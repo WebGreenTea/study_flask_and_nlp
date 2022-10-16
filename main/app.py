@@ -60,7 +60,6 @@ def uploadertypetext():
 def main():
     filenames = request.form.getlist('filenames')
     articles = request.form.getlist('articles')
-    print(articles)
     #save file
     currentTime = str(date.now()).replace('.','_').replace(':','-')
     if(len(filenames) == len(articles)):
