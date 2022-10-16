@@ -146,7 +146,7 @@
     //resetContentField()
     setSearchPage()
 
-    //search form
+    //search Page
     $('#searchform').submit(function(e){
         e.preventDefault()
         let searchResultarea = document.getElementById('searchResult')
@@ -210,7 +210,6 @@
         }
         
     })
- 
     $('#btnSearch').click(function(e){
         setSearchPage()
     })
@@ -223,6 +222,7 @@
         resetContentField()
     }
     
+    //NER Page
     $('#btnNER').click(function(e){
         setNerPage()
     });
@@ -262,7 +262,7 @@
         setContentfieldNER()    
     }
     function setContentfieldNER(){
-        contentfield.innerHTML = ''
+        clearContentField()
         for(let i = 0;i<NerhtmlList.length;i++){
             //add file name
             let PTitleTag = document.createElement("p");
