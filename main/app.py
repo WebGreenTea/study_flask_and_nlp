@@ -28,8 +28,8 @@ def searchword():
     articles=request.json['articles']
     searchWord=request.json['search']
     
-    process = p(articles)
-    result,count_Bag = process.searchWord(searchWord)
+    process = p()
+    result,count_Bag = process.searchWord(searchWord,articles)
     htmlList,count_Raw =  process.searchWordRaw_HTML(articles,searchWord)
 
     return jsonify({'message':'success','searchword':str(searchWord).lower().strip(),'searchresult':result,'count_Bag':count_Bag,'count_Raw':count_Raw,'htmlList':htmlList})
@@ -38,7 +38,7 @@ def searchword():
 @app.route('/entlabel',methods=['POST'])
 def entlabel():
     articles=request.json['articles']
-    process = p(articles)
+    process = p()
     return jsonify({'message':'success','nerList':process.spacyNER(articles)})
 
 @app.route('/uploadertypetext',methods=['POST'])
@@ -74,19 +74,28 @@ def main():
     data = {'filenames':filenames,'articles':articles}
     return render_template('main.html', data=data)
 
-    
+@app.route('/bag',methods=['POST'])
+def bag():
+    articles=request.json['articles']
+    try:
+        top = request.json['top']
+    except:
+        top = None
+    process = p()
+    word,quantity = process.bow(articles,top)
+    return jsonify({'message':'success','word': word,'quantity':quantity})
 
 @app.route('/fakeNews',methods=['POST'])
 def predicFakeNews():
-    news=request.json['articles'][0]
-    process = p(news)
-    return jsonify({'message':'success','predic': process.predicFakeNews(news,convert_to_label=True)})
+    articles=request.json['articles']
+    process = p()
+    return jsonify({'message':'success','predic': process.predicFakeNews(articles)})
 
 @app.route('/sentiment',methods=['POST'])
 def sentiment():
-    text=request.json['articles'][0]
-    process=p(text)
-    polarity,subjectivity = process.sentiment(text)
+    articles=request.json['articles']
+    process=p()
+    polarity,subjectivity = process.sentiment(articles)
     return jsonify({'message':'success','polarity': polarity,'subjectivity':subjectivity})
 
 def allowed_file(filename):

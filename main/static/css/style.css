@@ -5,6 +5,7 @@ body {
     color: #fff;
 }
 
+
 nav {
     background: #393B50
 }
@@ -378,4 +379,46 @@ hr.fileLine{
 }
 .filename{
     color: #00becc;
+}
+
+.circlePositive {
+    height: 20px;
+    width: 20px;
+    background-color: #65d658;
+    border-radius: 50%;
+    display: inline-block;
+}
+.circleNeutral {
+    height: 20px;
+    width: 20px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 50%;
+    display: inline-block;
+}
+.circleNegative {
+    height: 20px;
+    width: 20px;
+    background-color: #ff5151;
+    border-radius: 50%;
+    display: inline-block;
+}
+.circleFakenews {
+    height: 20px;
+    width: 20px;
+    background-color: #ffee00;
+    border-radius: 50%;
+    display: inline-block;
+}
+.text-negativ{
+    color: #ff5151;
+}
+.text-positive{
+    color: #65d658;
+}
+.text-fakenews{
+    color: #ffee00;
+}
+
+.radio-font{
+    font-size: 25px;
 }

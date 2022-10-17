@@ -15,9 +15,10 @@ from textblob import TextBlob
 import re
 
 class NLTKprocess:
-    def __init__(self,textList) -> None:
+    def __init__(self) -> None:
+        pass
         #print(textList)
-        self.preprocessed = self.preprocess(textList)
+        #self.preprocessed = self.preprocess(textList)
         #print(self.preprocessed)
 
     def preprocess(self,textList):
@@ -38,8 +39,8 @@ class NLTKprocess:
             articles.append(lemmatized)
         return articles
 
-    def bow(self):
-        articles = self.preprocessed
+    def bow(self,articles,top=None):
+        articles = self.preprocess(articles)
         #print(articles)
         dictionary = Dictionary(articles)
         corpus = [dictionary.doc2bow(a) for a in articles]
@@ -49,16 +50,25 @@ class NLTKprocess:
             total_word_count[word_id] += word_count
 
         topBOW = []
+        quantity = []
         sorted_word_count = sorted(total_word_count.items(), key=lambda w: w[1],reverse=True)
-        for word_id, word_count in sorted_word_count[:5]:
-            topBOW.append(f"{dictionary.get(word_id)} {word_count}")
-            #print(dictionary.get(word_id), word_count)
+        if(top):
+            for word_id, word_count in sorted_word_count[:top]:
+                #topBOW.append(f"{dictionary.get(word_id)} {word_count}")
+                topBOW.append(dictionary.get(word_id))
+                quantity.append(word_count)
+                #print(dictionary.get(word_id), word_count)
+        else:
+            for word_id, word_count in sorted_word_count:
+                topBOW.append(dictionary.get(word_id))
+                quantity.append(word_count)
+            
         #print(topBOW)
-        return topBOW
+        return topBOW,quantity
 
 
-    def tfidf(self):
-        articles = self.preprocessed
+    def tfidf(self,articles):
+        articles = self.preprocess(articles)
         dictionary = Dictionary(articles)
         #print(dictionary)
         #---------------------
@@ -86,9 +96,9 @@ class NLTKprocess:
         return topTFIDF
         
 
-    def searchWord(self,word):
+    def searchWord(self,word,articles):
         word = str(word).lower().strip()
-        articles = self.preprocessed
+        articles = self.preprocess(articles)
         # print(Counter(articles).most_common(10))
         #print(articles)
         dictionary = Dictionary(articles)
@@ -161,33 +171,38 @@ class NLTKprocess:
             NERhteml.append(displacy.render(doc, style="ent"))
         return NERhteml
 
-    def predicFakeNews(self,news,convert_to_label=False):
+    def predicFakeNews(self,articles):
         model_path = f"{str(pathlib.Path(__file__).parent.resolve().as_posix())}/model/fake-news-bert-base-uncased"
         model = AutoModelForSequenceClassification.from_pretrained(model_path)
         tokenizer = AutoTokenizer.from_pretrained(model_path)
-
-        # prepare our text into tokenized sequence
-        inputs = tokenizer(news, padding=True, truncation=True, max_length=512,return_tensors="pt")
-        # perform inference to our model
-        outputs = model(**inputs)
-        # get output probabilities by doing softmax
-        probs = outputs[0].softmax(1)
+        result = []
         # executing argmax function to get the candidate label
         d = {
             0: "reliable",
             1: "fake"
         }
-        if convert_to_label:
-            return d[int(probs.argmax())]
-        else:
-            return int(probs.argmax())
 
-    def sentiment(self,text):
-        # Create a textblob object
-        blob = TextBlob(text)
+        for news in articles:
+            # prepare our text into tokenized sequence
+            inputs = tokenizer(news, padding=True, truncation=True, max_length=512,return_tensors="pt")
+            # perform inference to our model
+            outputs = model(**inputs)
+            # get output probabilities by doing softmax
+            probs = outputs[0].softmax(1)
+            result.append(d[int(probs.argmax())])
+        return result
+        # if convert_to_label:
+        #     return 
+        # else:
+        #     return int(probs.argmax())
 
-        # Print out its sentiment
-        print(blob.sentiment)
-
-        return blob.sentiment
+    def sentiment(self,articles):
+        polarityList = []
+        subjectivityList = []
+        for text in articles:
+            blob = TextBlob(text)
+            polarity,subjectivity = blob.sentiment
+            polarityList.append(polarity)
+            subjectivityList.append(subjectivity)
+        return polarityList,subjectivityList
                     
