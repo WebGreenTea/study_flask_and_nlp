@@ -1,6 +1,3 @@
-
-from operator import le
-from sqlite3 import Time
 from flask import Flask,render_template,request,jsonify,session,redirect,url_for
 from flask_session import Session
 from werkzeug.utils import secure_filename
@@ -73,6 +70,18 @@ def main():
             i+=1
     data = {'filenames':filenames,'articles':articles}
     return render_template('main.html', data=data)
+
+@app.route('/tfidf',methods=['POST'])
+def tfidf():
+    articles=request.json['articles']
+    try:
+        top = request.json['top']
+    except:
+        top = None
+    process = p()
+    word,tf_idf = process.tfidf(articles,top)
+    return jsonify({'message':"success",'word':word,'tfidf':tf_idf})
+    
 
 @app.route('/bag',methods=['POST'])
 def bag():

@@ -154,18 +154,21 @@
                     </div>
                 </div>
                 <div id="BagContent" style="display: none;">
-                    <div class="form-check">
-                        <input class="form-check-input radio-font" type="radio" name="BagCount" id="BagRadio1" checked onchange="updateBOWTable()">
-                        <label class="form-check-label radio-font" for="BagCount1">
-                            All word
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input radio-font" type="radio" name="BagCount" id="BagRadio2" onchange="updateBOWTable()">
-                        <label class="form-check-label radio-font" for="BagCount2">
-                            Top 5
-                        </label>
-                      </div>
+                    <div class="row">
+                        <div class="form-check col-6 d-flex justify-content-center">
+                            <input class="form-check-input radio-font me-2" type="radio" name="BagCount" id="BagRadio1" checked onchange="updateBOWTable()">
+                            <label class="form-check-label radio-font" for="BagRadio1">
+                                All word
+                            </label>
+                        </div>
+                        <div class="form-check col-6 d-flex justify-content-center">
+                            <input class="form-check-input radio-font me-2" type="radio" name="BagCount" id="BagRadio2" onchange="updateBOWTable()">
+                            <label class="form-check-label radio-font" for="BagRadio2">
+                                Top 5
+                            </label>
+                        </div>
+                    </div>
+                    
                     <div class="">
                         <table class="table text-white mt-2" id="BagTable">
                             <thead>
@@ -189,7 +192,63 @@
         </div>
     </div>
     
+    <div class="container" id="tfidfPage" style="display: none;">
+        <div class="row">
+            <div class="col-5">
+                <div  id="loadTfidfIcon" style="display: none;">
+                    <div class="d-flex justify-content-center mt-5">
+                        <div class="spinner-grow me-3 ms-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="spinner-grow me-3 ms-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="spinner-grow me-3 ms-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <div class="spinner-grow me-3 ms-3" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="TfidfContent" style="display: none;">
+                    <div class="row">
+                        <div class="form-check col-6 d-flex justify-content-center">
+                            <input class="form-check-input radio-font me-2" type="radio" name="TFIDF" id="TFIDFRadio1" checked onchange="updateTfidfTable()">
+                            <label class="form-check-label radio-font" for="TFIDFRadio1">
+                                All word
+                            </label>
+                        </div>
+                        <div class="form-check col-6 d-flex justify-content-center">
+                            <input class="form-check-input radio-font me-2" type="radio" name="TFIDF" id="TFIDFRadio2" onchange="updateTfidfTable()">
+                            <label class="form-check-label radio-font" for="TFIDFRadio2">
+                                Top 5
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="">
+                        <table class="table text-white mt-2" id="tfidfTable">
+                            <thead>
+                              <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Word</th>
+                                <th scope="col">TF-IDF</th>
+                              </tr>
+                            </thead>
+                            <tbody id="tfidfTableBody">
+                              <!-- TF-IDF content -->
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
+                <h3 class="mt-5" id="TFIDF_Fail" style="display: none;">Cannot calculate TF-IDF because there is only 1 article</h3>
+            </div>
+            <div class="col-7" id="contentFieldtfidf">
 
+            </div>
+        </div>
+    </div>
 
 
 
@@ -217,6 +276,16 @@
     var BagwordList = []
     var BagquantityList = []
 
+    //foe keep tfidf
+    var TfdfWordList = []
+    var TfidfValueList = []
+
+    //TFIDF Fail text
+    var TFIDF_Fail = document.getElementById('TFIDF_Fail')
+
+    var TFIDFRadio1 = document.getElementById('TFIDFRadio1')
+    var TFIDFRadio2 = document.getElementById('TFIDFRadio2')
+
     var BagRadio1 = document.getElementById('BagRadio1')
     var BagRadio2 = document.getElementById('BagRadio2')
 
@@ -224,12 +293,14 @@
     var pageName = document.getElementById('pageName')
     var loadIcon = document.getElementById('loadIcon')
     var loadBagIcon = document.getElementById('loadBagIcon')
+    var loadTfidfIcon = document.getElementById('loadTfidfIcon')
 
     var searchPage = document.getElementById('searchPage')
     var NerPage = document.getElementById('NerPage')
     var SentimentPage = document.getElementById('SentimentPage')
     var FakenewsPage = document.getElementById('FakenewsPage')
     var BagPage = document.getElementById('BagPage')
+    var tfidfPage = document.getElementById('tfidfPage')
 
     var btnSearch = document.getElementById('btnSearch')
     var btnNER = document.getElementById('btnNER')
@@ -242,10 +313,16 @@
     
     var contentfield = document.getElementById('fileContent')
     var contentFieldBag = document.getElementById('contentFieldBag')
-    var BagTableBody = document.getElementById('BagTableBody')   
+    var contentFieldtfidf = document.getElementById('contentFieldtfidf')
+    var BagTableBody = document.getElementById('BagTableBody') 
+    var tfidfTableBody = document.getElementById('tfidfTableBody')  
     var BagContent = document.getElementById('BagContent') 
+    var TfidfContent = document.getElementById('TfidfContent')
 
 
+    //keep ajax request
+    var ajaxSearch,ajaxNER,ajaxSentiment,ajaxFakenews,ajaxBOW,ajaxTFIDF;
+    var xhr
     //set first page (search Page)
     setSearchPage()
 
@@ -259,7 +336,7 @@
         if(searchword.trim() != ''){
             //clear search result
             searchResultarea.innerHTML = ''
-            $.ajax({
+            xhr =  $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
                 url: "searchword",
@@ -310,9 +387,9 @@
         setSearchPage()
     })
     function setSearchPage(){
+        clearFeture()
         setPageName('Search word')
         clearContentField()
-        clearFeture()
         btnSearch.setAttribute("disabled", "");    
         searchPage.style.display = 'block'
         resetContentField()
@@ -323,13 +400,13 @@
         setNerPage()
     });
     function setNerPage(){
+        clearFeture()
         loadIcon.style.display = 'block'
         setPageName('Named-entity recognition')
         resetContentField()
-        clearFeture()
         btnNER.setAttribute("disabled", ""); 
         //NerPage.style.display = 'block'
-        $.ajax({
+        xhr =  $.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",
             url: "entlabel",
@@ -405,12 +482,12 @@
         setSentimentPage()
     })
     function setSentimentPage(){
+        clearFeture()
         loadIcon.style.display = 'block';
         setPageName('Sentiment Analysis');
         resetContentField()
-        clearFeture()
         btnSentiment.setAttribute("disabled", ""); 
-        $.ajax({
+        xhr =  $.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",
             url: "sentiment",
@@ -453,12 +530,12 @@
         setFakenewsPredic()
     })
     function setFakenewsPredic(){
+        clearFeture()
         loadIcon.style.display = 'block';
         setPageName('Fake news prediction');
         resetContentField()
-        clearFeture()
         btnFakeNews.setAttribute("disabled", ""); 
-        $.ajax({
+        xhr =  $.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",
             url: "fakeNews",
@@ -495,18 +572,17 @@
 
     //bag Page
     $('#btnBag').click(function(e){
-        console.log(99999)
         setBagPage()
     })
     function setBagPage(){
+        clearFeture()
         setPageName('Bag of word');
         resetContentField(contentFieldBag)
-        clearFeture()
         loadBagIcon.style.display = 'block'
         btnBag.setAttribute("disabled", ""); 
         disabledContentField();
         BagPage.style.display = 'block'
-        $.ajax({
+        xhr = $.ajax({
             type: "POST",
             contentType: "application/json; charset=utf-8",
             url: "bag",
@@ -523,11 +599,10 @@
         });
 
     }
-
     function updateBOWTable(){
         BagTableBody.innerHTML = ''
-        maxWord = BagwordList.length
-        if(BagRadio2.checked){
+        let maxWord = BagwordList.length
+        if(BagRadio2.checked && maxWord >= 5){
             maxWord = 5
         }
         for(let i = 0;i<maxWord;i++){
@@ -551,7 +626,79 @@
         }
     }
 
+    //tfidf Page
+    $('#btnTFIDF').click(function(e){
+        setTfidfPage()
+    })
+    function setTfidfPage(){
+        clearFeture()
+        setPageName('TF-IDF');
+        resetContentField(contentFieldtfidf)
+        loadTfidfIcon.style.display = 'block'
+        btnTFIDF.setAttribute("disabled", "");
+        disabledContentField(); 
+        tfidfPage.style.display = 'block'
+        xhr = $.ajax({
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            url: "tfidf",
+            dataType: "json",
+            data: JSON.stringify({articles: articles}),
+            success:function(response){
+                //console.log(response)
+                TfdfWordList = response['word']
+                TfidfValueList = response['tfidf']
+                updateTfidfTable()
+                
+                
+            }
+        })
+    }
+    function updateTfidfTable(){
+        tfidfTableBody.innerHTML = ''
+        let maxWord = TfdfWordList.length
+        
+        if(maxWord != 0){
+            if(TFIDFRadio2.checked  && maxWord >= 5){
+                maxWord = 5
+            }
+            for(let i = 0;i<maxWord;i++){
+                let tr = document.createElement("tr");
+
+                let th = document.createElement("th");
+                th.setAttribute('scope','row')
+                th.innerHTML = i+1
+                tr.appendChild(th)
+
+                let td = document.createElement('td');
+                td.innerHTML = TfdfWordList[i]
+                tr.appendChild(td)
+
+                td = document.createElement('td');
+                td.innerHTML = TfidfValueList[i]
+                tr.appendChild(td)
+
+                tfidfTableBody.appendChild(tr)
+                TfidfContent.style.display = 'block'
+            }
+        }else{
+            TfidfContent.style.display = 'none'
+            TFIDF_Fail.style.display = 'block'
+        }
+        loadTfidfIcon.style.display = 'none'
+                
+        
+    }
+
     function clearFeture(){
+        //clear request
+        if(xhr){
+            xhr.abort()    
+        }
+
+        //clear loadICON
+        loadIcon.style.display = 'none'
+
         //clear search
         searchPage.style.display = 'none'
         btnSearch.removeAttribute('disabled');
@@ -573,20 +720,36 @@
         btnFakeNews.removeAttribute('disabled');
 
         //clear bag of word
+        BagPage.style.display = 'none'
         btnBag.removeAttribute('disabled');
         enableContentField();
+        BagTableBody.innerHTML = ''
+        BagContent.style.display = 'none'
+        
 
-        btnSentiment.removeAttribute('disabled');
-        btnFakeNews.removeAttribute('disabled');
+
+        //clear tf-idf
+        tfidfPage.style.display = 'none';
+        btnTFIDF.removeAttribute('disabled');
+        enableContentField();
+        tfidfTableBody.innerHTML = ''
+        TfidfContent.style.display = 'none'
+        TFIDF_Fail.style.display = 'none'
+        
+
+
+        
+        
 
 
     }
 
     function clearContentField(){
         contentfield.innerHTML = ''
+        contentFieldBag.innerHTML = ''
+        contentFieldtfidf.innerHTML = ''
     }
     function resetContentField(contentTag){
-        
         if (!contentTag){
             contentTag = contentfield
         }

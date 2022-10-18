@@ -67,7 +67,7 @@ class NLTKprocess:
         return topBOW,quantity
 
 
-    def tfidf(self,articles):
+    def tfidf(self,articles,top=None):
         articles = self.preprocess(articles)
         dictionary = Dictionary(articles)
         #print(dictionary)
@@ -88,12 +88,20 @@ class NLTKprocess:
         
         #print(tfidf_weights)
 
-        topTFIDF = []
+        Tfidf = []
+        word = []
         sorted_tfidf_weights = sorted(tfidf_weights, key=lambda w: w[1], reverse=True)
-        for term_id, weight in sorted_tfidf_weights[:5]:
-            #print(dictionary.get(term_id), weight)
-            topTFIDF.append(f'{dictionary.get(term_id)} {weight}')
-        return topTFIDF
+        if(top):
+            for term_id, weight in sorted_tfidf_weights[:top]:
+                #print(dictionary.get(term_id), weight)
+                #topTFIDF.append(f'{dictionary.get(term_id)} {weight}')
+                Tfidf.append(weight)
+                word.append(dictionary.get(term_id))
+        else:
+            for term_id, weight in sorted_tfidf_weights:
+                Tfidf.append(weight)
+                word.append(dictionary.get(term_id))
+        return word,Tfidf
         
 
     def searchWord(self,word,articles):
