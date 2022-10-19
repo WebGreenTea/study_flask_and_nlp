@@ -41,16 +41,16 @@
     <div class="container " id="loadIcon" style="display: none;">
         <div class="d-flex justify-content-center mt-5">
             <div class="spinner-grow me-3 ms-3" role="status">
-                <span class="visually-hidden">Loading...</span>
+                
             </div>
             <div class="spinner-grow me-3 ms-3" role="status">
-                <span class="visually-hidden">Loading...</span>
+                
             </div>
             <div class="spinner-grow me-3 ms-3" role="status">
-                <span class="visually-hidden">Loading...</span>
+                
             </div>
             <div class="spinner-grow me-3 ms-3" role="status">
-                <span class="visually-hidden">Loading...</span>
+                
             </div>
         </div>
         
@@ -198,16 +198,16 @@
                 <div  id="loadTfidfIcon" style="display: none;">
                     <div class="d-flex justify-content-center mt-5">
                         <div class="spinner-grow me-3 ms-3" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                            
                         </div>
                         <div class="spinner-grow me-3 ms-3" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                            
                         </div>
                         <div class="spinner-grow me-3 ms-3" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                            
                         </div>
                         <div class="spinner-grow me-3 ms-3" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                            
                         </div>
                     </div>
                 </div>
@@ -336,6 +336,7 @@
         if(searchword.trim() != ''){
             //clear search result
             searchResultarea.innerHTML = ''
+            searchResultarea.innerHTML = '<div class="spinner-border text-primary mt-1" role="status"></div>'
             xhr =  $.ajax({
                 type: "POST",
                 contentType: "application/json; charset=utf-8",
@@ -343,6 +344,7 @@
                 dataType: "json",
                 data: JSON.stringify({articles: articles, search: searchword}),
                 success: function (response) {
+                    searchResultarea.innerHTML = ''
                     //console.log(response)
                     let searchresult = response['searchresult']
                     let count_Raw = response['count_Raw']
@@ -371,7 +373,7 @@
 
                         //add content
                         let p = document.createElement('p');
-                        p.setAttribute('style','white-space: pre-line')
+                        p.setAttribute('style','white-space: pre-line; line-height: 2.5; direction: ltr ')
                         p.innerHTML = htmlList[i].trim();
                         contentfield.appendChild(p);
                         let hrtag = document.createElement("hr")
@@ -645,7 +647,7 @@
             dataType: "json",
             data: JSON.stringify({articles: articles}),
             success:function(response){
-                //console.log(response)
+                console.log(response)
                 TfdfWordList = response['word']
                 TfidfValueList = response['tfidf']
                 updateTfidfTable()

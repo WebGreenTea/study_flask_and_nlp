@@ -73,15 +73,16 @@ class NLTKprocess:
         #print(dictionary)
         #---------------------
         corpus = [dictionary.doc2bow(a) for a in articles]
-        #print(corpus[0])
+        
+        
         #doc = corpus[0]
 
         tfidf = TfidfModel(corpus)
         tfidf_weights = []
         for doc in corpus:
             tfidf_weights += tfidf[doc]
-
-
+            
+        #print(f'tfidf_weights {len(tfidf_weights[1])}')
         #tfidf_weights = tfidf[doc]
         #print(tfidf_weights[:5])
         
