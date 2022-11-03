@@ -1,13 +1,13 @@
 from flask import Flask,render_template,request,jsonify
 # import mainurl
-from process import NLTKprocess as p
+from process import NLTKprocess
 import pathlib
 from datetime import datetime as date
 
 app = Flask(__name__)
 
 ALLOWED_EXTENSIONS = {'txt'}
-
+process = NLTKprocess()
 
 @app.route("/")
 def index():
@@ -18,8 +18,6 @@ def index():
 def searchword():
     articles=request.json['articles']
     searchWord=request.json['search']
-    
-    process = p()
     result,count_Bag = process.searchWord(searchWord,articles)
     htmlList,count_Raw =  process.searchWordRaw_HTML(articles,searchWord)
 
@@ -29,22 +27,15 @@ def searchword():
 @app.route('/entlabel',methods=['POST'])
 def entlabel():
     articles=request.json['articles']
-    process = p()
+    
     return jsonify({'message':'success','nerList':process.spacyNER(articles)})
 
 @app.route('/uploadertypetext',methods=['POST'])
 def uploadertypetext():
     #print('test')
     Raw_articles = [request.json['text']]
-    process = p(Raw_articles)
+    
     return jsonify({'message':'success','topBOW':process.bow(),'topTFIDF':process.tfidf()})
-
-
-# @app.route('/main',methods=['GET'])
-# def main2():
-#     print(9999)
-#     return jsonify({'message': 'success'})
-
 
 
 @app.route('/main', methods=['POST'])
@@ -72,7 +63,7 @@ def tfidf():
         top = request.json['top']
     except:
         top = None
-    process = p()
+    
     word,tf_idf = process.tfidf(articles,top)
     return jsonify({'message':"success",'word':word,'tfidf':tf_idf})
     
@@ -84,20 +75,19 @@ def bag():
         top = request.json['top']
     except:
         top = None
-    process = p()
+    
     word,quantity = process.bow(articles,top)
     return jsonify({'message':'success','word': word,'quantity':quantity})
 
 @app.route('/fakeNews',methods=['POST'])
 def predicFakeNews():
     articles=request.json['articles']
-    process = p()
+    
     return jsonify({'message':'success','predic': process.predicFakeNews(articles)})
 
 @app.route('/sentiment',methods=['POST'])
 def sentiment():
     articles=request.json['articles']
-    process=p()
     polarity,subjectivity = process.sentiment(articles)
     return jsonify({'message':'success','polarity': polarity,'subjectivity':subjectivity})
 

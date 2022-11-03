@@ -1,3 +1,4 @@
+import nltk
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
@@ -13,8 +14,11 @@ from textblob import TextBlob
 import re
 
 class NLTKprocess:
-    def __init__(self) -> None:
-        pass
+    def __init__(self):
+        nltk.download('punkt')
+        nltk.download('stopwords')
+        nltk.download('wordnet')
+        nltk.download('omw-1.4')
         #print(textList)
         #self.preprocessed = self.preprocess(textList)
         #print(self.preprocessed)
