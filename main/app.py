@@ -1,17 +1,11 @@
-from flask import Flask,render_template,request,jsonify,session,redirect,url_for
-from flask_session import Session
-from werkzeug.utils import secure_filename
+from flask import Flask,render_template,request,jsonify
 # import mainurl
 from process import NLTKprocess as p
-import json
 import pathlib
 from datetime import datetime as date
-import time
 
 app = Flask(__name__)
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
+
 ALLOWED_EXTENSIONS = {'txt'}
 
 

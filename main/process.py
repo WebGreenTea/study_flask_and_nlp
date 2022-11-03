@@ -1,4 +1,3 @@
-from collections import Counter
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
@@ -8,7 +7,6 @@ from collections import defaultdict
 from gensim.models.tfidfmodel import TfidfModel
 import spacy
 from spacy import displacy
-import pandas as pd
 from transformers import AutoTokenizer,AutoModelForSequenceClassification
 import pathlib
 from textblob import TextBlob
