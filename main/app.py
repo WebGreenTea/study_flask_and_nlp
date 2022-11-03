@@ -30,13 +30,6 @@ def entlabel():
     
     return jsonify({'message':'success','nerList':process.spacyNER(articles)})
 
-@app.route('/uploadertypetext',methods=['POST'])
-def uploadertypetext():
-    #print('test')
-    Raw_articles = [request.json['text']]
-    
-    return jsonify({'message':'success','topBOW':process.bow(),'topTFIDF':process.tfidf()})
-
 
 @app.route('/main', methods=['POST'])
 def main():
